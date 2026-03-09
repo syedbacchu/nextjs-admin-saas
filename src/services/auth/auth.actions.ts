@@ -2,7 +2,11 @@
 
 import { cookies } from 'next/headers'
 import { AuthService } from '@/services/auth/auth.service'
-import { AuthLoginResponse } from '@/services/auth/auth.types'
+import {
+    AuthForgotPasswordResponse,
+    AuthLoginResponse,
+    AuthResetPasswordResponse,
+} from '@/services/auth/auth.types'
 
 function getJwtMaxAgeSeconds(token: string): number | undefined {
     try {
@@ -66,4 +70,18 @@ export async function logoutAction() {
     const cookieStore = await cookies()
     cookieStore.delete('access_token')
     cookieStore.delete('tenant_slug')
+}
+
+export async function forgotPasswordAction(
+    tenantSlug: string,
+    formData: FormData,
+): Promise<AuthForgotPasswordResponse> {
+    return AuthService.forgotPassword(tenantSlug, formData)
+}
+
+export async function resetPasswordAction(
+    tenantSlug: string,
+    formData: FormData,
+): Promise<AuthResetPasswordResponse> {
+    return AuthService.resetPassword(tenantSlug, formData)
 }

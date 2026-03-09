@@ -6,7 +6,11 @@ import { useAuthStore } from '@/stores/auth.store'
 import { toast } from 'sonner';
 import {MdLogout} from "react-icons/md";
 
-export default function LogoutButton() {
+interface LogoutButtonProps {
+    compact?: boolean
+}
+
+export default function LogoutButton({ compact = false }: LogoutButtonProps) {
     const router = useRouter()
     const params = useParams<{ tenant_slug?: string }>()
     const logout = useAuthStore((s) => s.logout)
@@ -24,10 +28,10 @@ export default function LogoutButton() {
     }
 
     return (
-        <button onClick={handleLogout}>
-            <span className="text-sm text-gray-600 px-2 py-1 flex items-center gap-2">
+        <button onClick={handleLogout} aria-label="Logout">
+            <span className={`text-sm text-gray-600 px-2 py-1 flex items-center gap-2 ${compact ? 'justify-center' : ''}`}>
                 <MdLogout className="text-base" />
-                {"Logout"}
+                {!compact && "Logout"}
             </span>
         </button>
     )

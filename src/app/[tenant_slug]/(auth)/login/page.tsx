@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { toast } from 'sonner';
 import {loginClient} from "@/services/auth/auth.client";
 import type { AuthLoginData, AuthLoginResponse } from '@/services/auth/auth.types'
@@ -10,6 +11,7 @@ import type { AuthLoginData, AuthLoginResponse } from '@/services/auth/auth.type
 export default function LoginPage() {
     const router = useRouter()
     const params = useParams<{ tenant_slug: string }>()
+    const tenantSlug = String(params?.tenant_slug || '').trim()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
@@ -19,7 +21,6 @@ export default function LoginPage() {
         setError('')
 
         const formData = new FormData(e.currentTarget)
-        const tenantSlug = String(params?.tenant_slug || '').trim()
 
         if (!tenantSlug) {
             toast.error('Invalid tenant')
@@ -82,6 +83,15 @@ export default function LoginPage() {
                 >
                     {loading ? 'Logging in...' : 'Login'}
                 </button>
+
+                <div className="text-right">
+                    <Link
+                        href={`/${tenantSlug}/forgot-password`}
+                        className="text-sm font-medium text-blue-600 hover:text-blue-800"
+                    >
+                        Forgot password?
+                    </Link>
+                </div>
             </form>
         </div>
     )

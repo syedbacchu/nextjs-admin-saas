@@ -36,3 +36,5 @@ export interface AuthMeData {
 
 export type AuthLoginResponse = ApiResponse<AuthLoginData>
 export type AuthMeResponse = ApiResponse<AuthMeData>
+export type AuthForgotPasswordResponse = ApiResponse<unknown[]>
+export type AuthResetPasswordResponse = ApiResponse<unknown[]>

@@ -30,8 +30,9 @@ export function middleware(req: NextRequest) {
     }
 
     const tenantSlug = rootSegment
-    const isTenantLoginRoute = segments.length === 2 && segments[1] === 'login'
-    const isTenantProtectedRoute = !isTenantLoginRoute
+    const tenantAuthPublicRoutes = new Set(['login', 'forgot-password', 'reset-password'])
+    const isTenantAuthPublicRoute = segments.length === 2 && tenantAuthPublicRoutes.has(segments[1])
+    const isTenantProtectedRoute = !isTenantAuthPublicRoute
 
     // Protect tenant admin routes with tenant-bound session
     const isTenantSessionValid = Boolean(token && sessionTenantSlug && sessionTenantSlug === tenantSlug)
@@ -41,8 +42,8 @@ export function middleware(req: NextRequest) {
         return NextResponse.redirect(loginUrl)
     }
 
-    // Prevent logged-in users from opening login for the same tenant
-    if (tenantSlug && isTenantLoginRoute && isTenantSessionValid) {
+    // Prevent logged-in users from opening auth public routes for the same tenant
+    if (tenantSlug && isTenantAuthPublicRoute && isTenantSessionValid) {
         return NextResponse.redirect(new URL(`/${tenantSlug}`, req.url))
     }
 
