@@ -19,12 +19,12 @@ export interface ColumnDef<T> {
     className?: string
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
     success: boolean
     message: string
     // Optional because it might not exist on success=false
     error_message?: string
     status?: number
     // Generic Data (T can be User, Tournament, etc.)
-    data: T[]
+    data: T
 }

@@ -26,25 +26,11 @@ export default function Header() {
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
     const navLinks: NavItem[] = [
-        { name: 'Series',
-            icon: FaTrophy,
-            children: [
-                ...(user
-                    ? [
-                        { name: 'Ongoing Series', href: '/series' },
-                        { name: 'All Series', href: '/series' },
-                        { name: 'My Tournament', href: '/admin/tournament' },
-                        { name: 'Create Tournament', href: '/admin/tournament/create' },
-                    ]
-                    : [
-                        { name: 'Ongoing Series', href: '/series/' },
-                        { name: 'All Series', href: '/series' }
-                    ]),
 
-            ]},
-        { name: 'Live Matches', href: '/matches' ,icon: MdLiveTv},
-        { name: 'Teams', href: '/teams', icon: FaUsers,},
-        { name: 'Players', href: '/players', icon: FaUser, },
+        { name: 'Home', href: '/' ,icon: MdLiveTv},
+        { name: 'About', href: '/about-us' ,icon: MdLiveTv},
+        { name: 'Pricing', href: '/pricing' ,icon: MdLiveTv},
+        { name: 'Contact', href: '/contact-us' ,icon: MdLiveTv},
         { name: 'Blogs', href: '/blogs', icon: FaRegNewspaper, },
     ]
 
@@ -97,7 +83,7 @@ export default function Header() {
                     <Link href="/" className="flex items-center">
                         <Image
                             src={'/logo.png'}
-                            alt={'setmyscore'}
+                            alt={'Admin SaaS'}
                             width={140}  // Set your actual pixel width
                             height={40}  // Set your actual pixel height
                             className="w-auto h-12 md:h-16" // Responsive height using Tailwind
@@ -157,56 +143,9 @@ export default function Header() {
 
                 {/* Auth menu */}
                 <div className="flex items-center gap-4 relative">
-                    {!user ? (
-                        <Link href="/login" className="text-sm font-medium hover:text-primary transition-colors px-4 py-2 border border-primary rounded-lg hover:bg-primary hover:text-white">
-                            Login
-                        </Link>
-                    ) : (
-                        <div className="relative">
-                            <button
-                                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                                onClick={() => setAuthOpen((prev) => !prev)}
-                            >
-                                <img src={user.image || '/default-user.png'} alt="user" className="w-8 h-8 rounded-full border-2 border-gray-200" />
-                                <span className=" text-sm font-medium">{user.name}</span>
-                                <svg className={`w-3 h-3 transition-transform duration-200 ${authOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-
-                            {authOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg p-2 flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
-                                    {user.name &&
-                                        <span className="text-sm text-gray-600 px-2 py-1 flex items-center gap-2">
-                                            <FaUserCircle className="text-base" />
-                                            {user.name}
-                                        </span>}
-                                    {user.email &&
-                                        <span className="text-sm text-gray-600 px-2 py-1 flex items-center gap-2">
-                                            <MdEmail className="text-base" />
-                                            {user.email}
-                                        </span>}
-                                    {user.phone &&
-                                        <span className="text-sm text-gray-600 px-2 py-1 flex items-center gap-2">
-                                            <FaPhoneSquareAlt className="text-base" />
-                                            {user.phone}
-                                        </span>}
-                                    <div className="border-t pt-2">
-                                        <Link href='/admin/profile/update'>
-                                            <span className="text-sm text-gray-600 px-2 py-1 flex items-center gap-2">
-                                            <FaUserEdit className="text-base" />
-                                                {'Update Profile'}
-                                        </span>
-
-                                        </Link>
-                                    </div>
-                                    <div className="border-t pt-2">
-                                        <LogoutButton />
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
+                    <Link href="/" className="text-sm font-medium bg-purple-700 hover:text-primary transition-colors px-4 py-2 border border-primary rounded-lg hover:bg-primary text-white hover:text-white">
+                        Get Started
+                    </Link>
                 </div>
             </div>
 

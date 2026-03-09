@@ -42,7 +42,7 @@ export async function apiFetchServer({
     }
 
     // 3. Inject Token SECURELY
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const token = cookieStore.get('access_token')?.value
     if (token) {
         headers['Authorization'] = `Bearer ${token}`

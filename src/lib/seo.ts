@@ -18,7 +18,7 @@ export function constructMetadata({
     return {
         title: {
             default: title,
-            template: `%s | SetMyScore` // Autosuffixes your site name
+            template: `%s | Admin` // Autosuffixes your site name
         },
         description,
         openGraph: {

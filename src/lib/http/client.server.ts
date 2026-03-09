@@ -11,8 +11,9 @@ export const serverClient = axios.create({
     },
 })
 
-serverClient.interceptors.request.use((config) => {
-    const token = cookies().get('access_token')?.value
+serverClient.interceptors.request.use(async (config) => {
+    const cookieStore = await cookies()
+    const token = cookieStore.get('access_token')?.value
 
     if (token) {
         config.headers.Authorization = `Bearer ${token}`

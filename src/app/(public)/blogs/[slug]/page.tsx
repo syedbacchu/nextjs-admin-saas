@@ -106,7 +106,7 @@ export default async function page({ params }: PageProps) {
                         </h1>
 
                         <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-slate-500">
-                            <span className="font-semibold text-slate-700">{blog.author?.name || 'SetMyScore'}</span>
+                            <span className="font-semibold text-slate-700">{blog.author?.name || 'Admin'}</span>
                             {published && <span>{published}</span>}
                         </div>
 

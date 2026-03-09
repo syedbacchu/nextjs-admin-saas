@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth.store'
-import { meAction } from '@/actions/auth.actions'
+import { meAction } from '@/services/auth/auth.actions'
 
 export default function AuthHydrator() {
     const setUser = useAuthStore((s) => s.setUser)

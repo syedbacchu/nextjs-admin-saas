@@ -18,7 +18,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   // 1. CRITICAL FIX: This allows Next.js to find your images/icons
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://setmyscore.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://car.bmhbd.org'),
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -30,28 +30,28 @@ export const metadata: Metadata = {
     ],
   },
   title: {
-    default: 'SetMyScore',
-    template: '%s | SetMyScore',
+    default: 'Admin',
+    template: '%s | Admin',
   },
   description: 'Keep track of your games with ease, anytime, anywhere.',
   openGraph: {
-    title: 'SetMyScore',
+    title: 'Admin',
     description: 'A comprehensive cricket scoring platform for live matches, tournaments, auctions and player stats.',
-    url: 'https://setmyscore.com',
-    siteName: 'SetMyScore',
+    url: 'https://Admin.com',
+    siteName: 'Admin',
     images: [
       {
         url: '/og/default.png',
         width: 1200,
         height: 630,
-        alt: 'SetMyScore – Live Cricket Scoring',
+        alt: 'Admin – Live Cricket Scoring',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SetMyScore',
+    title: 'Admin',
     description: 'Track live cricket matches, tournaments and player stats.',
     images: ['/og/default.png'],
   },
