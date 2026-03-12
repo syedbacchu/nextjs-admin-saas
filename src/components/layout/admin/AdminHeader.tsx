@@ -5,7 +5,17 @@ import { useMemo, useState } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import { useAuthStore } from '@/stores/auth.store'
 import LogoutButton from '@/components/LogoutButton'
-import { CarFront, CreditCard, LayoutDashboard, Menu, PanelLeftClose, PanelLeftOpen, UserRound, X } from 'lucide-react'
+import {
+    CarFront,
+    CreditCard,
+    LayoutDashboard,
+    Menu,
+    PanelLeftClose,
+    PanelLeftOpen,
+    UserRound,
+    Users,
+    X,
+} from 'lucide-react'
 import Image from "next/image";
 
 export default function AdminHeader() {
@@ -40,6 +50,12 @@ export default function AdminHeader() {
             href: tenantSlug ? `/${tenantSlug}/vehicles` : '#',
             icon: CarFront,
             isActive: pathname?.startsWith(`/${tenantSlug}/vehicles`),
+        },
+        {
+            name: 'Drivers',
+            href: tenantSlug ? `/${tenantSlug}/drivers` : '#',
+            icon: Users,
+            isActive: pathname?.startsWith(`/${tenantSlug}/drivers`),
         },
     ]), [pathname, tenantSlug])
 
