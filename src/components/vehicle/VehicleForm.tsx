@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { createVehicleClient, updateVehicleClient } from '@/services/vehicle/vehicle.client'
 import type { Vehicle } from '@/services/vehicle/vehicle.types'
+import TextInput from '@/components/form/TextInput'
+import SelectInput from '@/components/form/SelectInput'
 
 interface VehicleFormProps {
     tenantSlug: string
@@ -14,6 +16,14 @@ interface VehicleFormProps {
 }
 
 const VEHICLE_TYPES = ['van', 'truck', 'car', 'bus', 'pickup']
+const VEHICLE_TYPE_OPTIONS = VEHICLE_TYPES.map((type) => ({
+    label: type.charAt(0).toUpperCase() + type.slice(1),
+    value: type,
+}))
+const STATUS_OPTIONS = [
+    { label: 'Active', value: '1' },
+    { label: 'Inactive', value: '0' },
+]
 
 export default function VehicleForm({
     tenantSlug,
@@ -97,67 +107,73 @@ export default function VehicleForm({
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-                <input
+                <TextInput
+                    label="Registration No"
+                    name="registration_no"
                     value={registrationNo}
-                    onChange={(e) => setRegistrationNo(e.target.value)}
+                    onChange={setRegistrationNo}
                     placeholder="Registration No"
-                    className="w-full rounded border px-3 py-2"
+                    required
                 />
-
-                <select
+                <SelectInput
+                    label="Vehicle Type"
+                    name="vehicle_type"
                     value={vehicleType}
-                    onChange={(e) => setVehicleType(e.target.value)}
-                    className="w-full rounded border px-3 py-2"
-                >
-                    {VEHICLE_TYPES.map((type) => (
-                        <option key={type} value={type}>{type}</option>
-                    ))}
-                </select>
-
-                <input
+                    options={VEHICLE_TYPE_OPTIONS}
+                    onChange={setVehicleType}
+                    includeEmptyOption={false}
+                />
+                <TextInput
+                    label="Brand"
+                    name="brand"
                     value={brand}
-                    onChange={(e) => setBrand(e.target.value)}
+                    onChange={setBrand}
                     placeholder="Brand"
-                    className="w-full rounded border px-3 py-2"
+                    required
                 />
-
-                <input
+                <TextInput
+                    label="Model"
+                    name="model"
                     value={model}
-                    onChange={(e) => setModel(e.target.value)}
+                    onChange={setModel}
                     placeholder="Model"
-                    className="w-full rounded border px-3 py-2"
+                    required
                 />
-
-                <input
+                <TextInput
+                    label="Manufacturing Year"
+                    name="manufacturing_year"
                     value={manufacturingYear}
-                    onChange={(e) => setManufacturingYear(e.target.value.replace(/\D/g, ''))}
+                    onChange={setManufacturingYear}
                     placeholder="Manufacturing Year"
-                    className="w-full rounded border px-3 py-2"
+                    allowOnlyNumber
+                    maxLength={4}
+                    required
                 />
-
-                <input
+                <TextInput
+                    label="Color"
+                    name="color"
                     value={color}
-                    onChange={(e) => setColor(e.target.value)}
+                    onChange={setColor}
                     placeholder="Color"
-                    className="w-full rounded border px-3 py-2"
                 />
-
-                <select
+                <SelectInput
+                    label="Status"
+                    name="status"
                     value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                    className="w-full rounded border px-3 py-2"
-                >
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
-                </select>
+                    options={STATUS_OPTIONS}
+                    onChange={setStatus}
+                    includeEmptyOption={false}
+                />
             </div>
 
-            <textarea
+            <TextInput
+                label="Notes"
+                name="notes"
                 value={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                onChange={setNotes}
                 placeholder="Notes"
+                textarea
                 rows={3}
-                className="w-full rounded border px-3 py-2"
             />
 
             <div className="flex items-center gap-3">

@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { createDriverClient, updateDriverClient } from '@/services/driver/driver.client'
 import type { Driver } from '@/services/driver/driver.types'
+import TextInput from '@/components/form/TextInput'
+import SelectInput from '@/components/form/SelectInput'
+import { DateInput } from '@/components/form/DateInput'
 
 interface DriverFormProps {
     tenantSlug: string
@@ -12,6 +15,11 @@ interface DriverFormProps {
     driverId?: number | string
     submitLabel?: string
 }
+
+const STATUS_OPTIONS = [
+    { label: 'Active', value: '1' },
+    { label: 'Inactive', value: '0' },
+]
 
 function toDateInputValue(value?: string | null): string {
     if (!value) return ''
@@ -102,64 +110,68 @@ export default function DriverForm({
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-                <input
+                <TextInput
+                    label="Driver Name"
+                    name="name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={setName}
                     placeholder="Driver Name"
-                    className="w-full rounded border px-3 py-2"
+                    required
                 />
-
-                <input
+                <TextInput
+                    label="Phone"
+                    name="phone"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={setPhone}
                     placeholder="Phone"
-                    className="w-full rounded border px-3 py-2"
+                    required
                 />
-
-                <input
+                <TextInput
+                    label="License No"
+                    name="license_no"
                     value={licenseNo}
-                    onChange={(e) => setLicenseNo(e.target.value)}
+                    onChange={setLicenseNo}
                     placeholder="License No"
-                    className="w-full rounded border px-3 py-2"
+                    required
                 />
-
-                <input
+                <TextInput
+                    label="NID No"
+                    name="nid_no"
                     value={nidNo}
-                    onChange={(e) => setNidNo(e.target.value)}
+                    onChange={setNidNo}
                     placeholder="NID No"
-                    className="w-full rounded border px-3 py-2"
                 />
-
-                <input
-                    type="date"
+                <DateInput
+                    label="Joining Date"
+                    name="joining_date"
                     value={joiningDate}
-                    onChange={(e) => setJoiningDate(e.target.value)}
-                    className="w-full rounded border px-3 py-2"
+                    onChange={setJoiningDate}
                 />
-
-                <select
+                <SelectInput
+                    label="Status"
+                    name="status"
                     value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                    className="w-full rounded border px-3 py-2"
-                >
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
-                </select>
+                    options={STATUS_OPTIONS}
+                    onChange={setStatus}
+                    includeEmptyOption={false}
+                />
             </div>
 
-            <input
+            <TextInput
+                label="Address"
+                name="address"
                 value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={setAddress}
                 placeholder="Address"
-                className="w-full rounded border px-3 py-2"
             />
-
-            <textarea
+            <TextInput
+                label="Notes"
+                name="notes"
                 value={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                onChange={setNotes}
                 placeholder="Notes"
+                textarea
                 rows={3}
-                className="w-full rounded border px-3 py-2"
             />
 
             <div className="flex items-center gap-3">

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { forgotPasswordClient } from '@/services/auth/auth.client'
+import TextInput from '@/components/form/TextInput'
 
 export default function ForgotPasswordPage() {
     const router = useRouter()
@@ -54,12 +55,13 @@ export default function ForgotPasswordPage() {
             <p className="text-sm text-slate-600 mb-4">Enter your email or username to receive an OTP.</p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-                <input
+                <TextInput
+                    label="Username or Email"
                     name="login"
                     value={login}
-                    onChange={(e) => setLogin(e.target.value)}
+                    onChange={setLogin}
                     placeholder="Username or Email"
-                    className="w-full border px-3 py-2 rounded"
+                    required
                 />
 
                 <button

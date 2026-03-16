@@ -3,9 +3,10 @@
 import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { toast } from 'sonner';
-import {loginClient} from "@/services/auth/auth.client";
+import { toast } from 'sonner'
+import { loginClient } from '@/services/auth/auth.client'
 import type { AuthLoginData, AuthLoginResponse } from '@/services/auth/auth.types'
+import TextInput from '@/components/form/TextInput'
 
 
 export default function LoginPage() {
@@ -14,21 +15,34 @@ export default function LoginPage() {
     const tenantSlug = String(params?.tenant_slug || '').trim()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+    const [login, setLogin] = useState('')
+    const [password, setPassword] = useState('')
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        setLoading(true)
         setError('')
+        const normalizedLogin = login.trim()
+        const normalizedPassword = password
 
-        const formData = new FormData(e.currentTarget)
-
-        if (!tenantSlug) {
-            toast.error('Invalid tenant')
-            setLoading(false)
+        if (!normalizedLogin) {
+            toast.error('Username or email is required')
+            return
+        }
+        if (!normalizedPassword) {
+            toast.error('Password is required')
             return
         }
 
+        if (!tenantSlug) {
+            toast.error('Invalid tenant')
+            return
+        }
+
+        setLoading(true)
         try {
+            const formData = new FormData()
+            formData.append('login', normalizedLogin)
+            formData.append('password', normalizedPassword)
             const res = await loginClient(tenantSlug, formData) as AuthLoginResponse
 
             if (res.success) {
@@ -62,19 +76,22 @@ export default function LoginPage() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-                <input
+                <TextInput
+                    label="Username or Email"
                     name="login"
+                    value={login}
+                    onChange={setLogin}
                     placeholder="Username or Email"
-                    // required
-                    className="w-full border px-3 py-2 rounded"
+                    required
                 />
-
-                <input
+                <TextInput
+                    label="Password"
                     name="password"
-                    placeholder="Password"
                     type="password"
-                    // required
-                    className="w-full border px-3 py-2 rounded"
+                    value={password}
+                    onChange={setPassword}
+                    placeholder="Password"
+                    required
                 />
 
                 <button

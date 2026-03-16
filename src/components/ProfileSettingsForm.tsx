@@ -1,10 +1,11 @@
 'use client'
 
-import { FormEvent, useEffect, useState } from 'react'
-import Image from 'next/image'
+import { FormEvent, useState } from 'react'
 import { toast } from 'sonner'
 import { changePasswordClient, updateProfileClient } from '@/services/profile/profile.client'
 import type { ProfileUser } from '@/services/profile/profile.types'
+import TextInput from '@/components/form/TextInput'
+import FileUploadInput from '@/components/form/FileUploadInput'
 
 interface ProfileSettingsFormProps {
     tenantSlug: string
@@ -24,7 +25,6 @@ export default function ProfileSettingsForm({ tenantSlug, initialUser }: Profile
     const [address, setAddress] = useState(initialUser.address || '')
     const [language, setLanguage] = useState(initialUser.language || 'en')
     const [imageFile, setImageFile] = useState<File | null>(null)
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
     const [updating, setUpdating] = useState(false)
     const [changingPassword, setChangingPassword] = useState(false)
@@ -33,22 +33,6 @@ export default function ProfileSettingsForm({ tenantSlug, initialUser }: Profile
         new_password: '',
         confirm_password: '',
     })
-
-    useEffect(() => {
-        if (!imageFile) {
-            setPreviewUrl(null)
-            return
-        }
-
-        const objectUrl = URL.createObjectURL(imageFile)
-        setPreviewUrl(objectUrl)
-
-        return () => {
-            URL.revokeObjectURL(objectUrl)
-        }
-    }, [imageFile])
-
-    const avatarSrc = previewUrl || initialUser.image || '/default-user.png'
 
     async function handleProfileSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -143,55 +127,56 @@ export default function ProfileSettingsForm({ tenantSlug, initialUser }: Profile
                 <p className="mt-1 text-sm text-slate-600">Keep your account details up to date.</p>
 
                 <form onSubmit={handleProfileSubmit} className="mt-6 space-y-4">
-                    <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
-                        <Image
-                            src={avatarSrc}
-                            alt={name || 'User'}
-                            width={72}
-                            height={72}
-                            unoptimized
-                            className="h-18 w-18 rounded-full border border-slate-200 object-cover"
-                        />
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-                            className="w-full text-sm md:max-w-sm"
+                    <div className="w-full md:max-w-sm">
+                        <FileUploadInput
+                            label="Profile Image"
+                            name="image"
+                            value={imageFile || initialUser.image || null}
+                            onChange={setImageFile}
                         />
                     </div>
 
                     <div className="grid gap-4 md:grid-cols-2">
-                        <input
+                        <TextInput
+                            label="Name"
+                            name="name"
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={setName}
                             placeholder="Name"
-                            className="w-full rounded border px-3 py-2"
+                            required
                         />
-                        <input
+                        <TextInput
+                            label="Email"
+                            name="email"
+                            type="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={setEmail}
                             placeholder="Email"
-                            className="w-full rounded border px-3 py-2"
+                            required
                         />
-                        <input
+                        <TextInput
+                            label="Phone"
+                            name="phone"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={setPhone}
                             placeholder="Phone"
-                            className="w-full rounded border px-3 py-2"
                         />
-                        <input
+                        <TextInput
+                            label="Language"
+                            name="language"
                             value={language}
-                            onChange={(e) => setLanguage(e.target.value)}
+                            onChange={setLanguage}
                             placeholder="Language"
-                            className="w-full rounded border px-3 py-2"
                         />
                     </div>
 
-                    <textarea
+                    <TextInput
+                        label="Address"
+                        name="address"
                         value={address}
-                        onChange={(e) => setAddress(e.target.value)}
+                        onChange={setAddress}
                         placeholder="Address"
-                        className="w-full rounded border px-3 py-2"
+                        textarea
                         rows={3}
                     />
 
@@ -209,26 +194,32 @@ export default function ProfileSettingsForm({ tenantSlug, initialUser }: Profile
                 <p className="mt-1 text-sm text-slate-600">Use a strong password for account security.</p>
 
                 <form onSubmit={handlePasswordSubmit} className="mt-6 space-y-4">
-                    <input
+                    <TextInput
+                        label="Current Password"
+                        name="current_password"
                         type="password"
                         value={passwordForm.current_password}
-                        onChange={(e) => setPasswordForm((prev) => ({ ...prev, current_password: e.target.value }))}
+                        onChange={(value) => setPasswordForm((prev) => ({ ...prev, current_password: value }))}
                         placeholder="Current password"
-                        className="w-full rounded border px-3 py-2"
+                        required
                     />
-                    <input
+                    <TextInput
+                        label="New Password"
+                        name="new_password"
                         type="password"
                         value={passwordForm.new_password}
-                        onChange={(e) => setPasswordForm((prev) => ({ ...prev, new_password: e.target.value }))}
+                        onChange={(value) => setPasswordForm((prev) => ({ ...prev, new_password: value }))}
                         placeholder="New password"
-                        className="w-full rounded border px-3 py-2"
+                        required
                     />
-                    <input
+                    <TextInput
+                        label="Confirm Password"
+                        name="confirm_password"
                         type="password"
                         value={passwordForm.confirm_password}
-                        onChange={(e) => setPasswordForm((prev) => ({ ...prev, confirm_password: e.target.value }))}
+                        onChange={(value) => setPasswordForm((prev) => ({ ...prev, confirm_password: value }))}
                         placeholder="Confirm password"
-                        className="w-full rounded border px-3 py-2"
+                        required
                     />
 
                     <button

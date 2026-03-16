@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
 import { resetPasswordClient } from '@/services/auth/auth.client'
+import TextInput from '@/components/form/TextInput'
 
 export default function ResetPasswordPage() {
     const router = useRouter()
@@ -84,30 +85,31 @@ export default function ResetPasswordPage() {
                     Login: {login || 'N/A'}
                 </div>
 
-                <input
+                <TextInput
+                    label="OTP"
                     name="otp"
                     value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
+                    onChange={setOtp}
                     placeholder="OTP"
-                    className="w-full border px-3 py-2 rounded"
+                    required
                 />
-
-                <input
+                <TextInput
+                    label="New Password"
                     name="password"
+                    type="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    type="password"
+                    onChange={setPassword}
                     placeholder="New Password"
-                    className="w-full border px-3 py-2 rounded"
+                    required
                 />
-
-                <input
+                <TextInput
+                    label="Confirm Password"
                     name="confirm_password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
                     type="password"
+                    value={confirmPassword}
+                    onChange={setConfirmPassword}
                     placeholder="Confirm Password"
-                    className="w-full border px-3 py-2 rounded"
+                    required
                 />
 
                 <button

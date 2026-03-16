@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useId, useState } from 'react'
 
 interface Props {
     label: string
@@ -23,6 +23,8 @@ interface Props {
     noSpace?: boolean
     allowOnlyNumber?: boolean
     validators?: Array<(value: string) => string | null>
+    id?: string
+    rows?: number
 }
 
 export default function TextInput({
@@ -42,8 +44,12 @@ export default function TextInput({
                                       noSpace,
                                       allowOnlyNumber,
                                       validators = [],
+                                      id,
+                                      rows = 4,
                                   }: Props) {
     const [localError, setLocalError] = useState<string | null>(null)
+    const reactId = useId()
+    const fieldId = id || `${name}-${reactId}`
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         let val = e.target.value
@@ -93,24 +99,27 @@ export default function TextInput({
 
     return (
         <div className="flex flex-col gap-1 w-full">
-            <label className="text-sm font-medium text-gray-700">
+            <label htmlFor={fieldId} className="text-sm font-medium text-gray-700">
                 {label} {required && <span className="text-red-500">*</span>}
             </label>
 
             {textarea ? (
                 <textarea
+                    id={fieldId}
                     name={name}
                     value={value || ''}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     placeholder={placeholder}
                     className={`border rounded px-3 py-2 focus:outline-none focus:ring transition-all
+                        w-full
                         ${activeError ? 'border-red-500 ring-red-100' : 'border-gray-300 focus:border-blue-500'}
                     `}
-                    rows={4}
+                    rows={rows}
                 />
             ) : (
                 <input
+                    id={fieldId}
                     type={type}
                     name={name}
                     value={value || ''}
@@ -118,6 +127,7 @@ export default function TextInput({
                     onBlur={handleBlur}
                     placeholder={placeholder}
                     className={`border rounded px-3 py-2 focus:outline-none focus:ring transition-all
+                        w-full
                         ${activeError ? 'border-red-500 ring-red-100' : 'border-gray-300 focus:border-blue-500'}
                     `}
                 />

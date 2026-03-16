@@ -4,6 +4,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { getBlogCommentsAction, submitBlogCommentAction } from '@/services/blog/blog.actions'
 import { BlogComment } from '@/services/blog/blog.types'
+import TextInput from '@/components/form/TextInput'
 
 interface Props {
     slug: string
@@ -170,36 +171,32 @@ export default function BlogCommentsSection({ slug }: Props) {
             </div>
 
             <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label className="text-sm font-semibold text-slate-700">Name</label>
-                    <input
-                        type="text"
-                        value={form.name}
-                        onChange={(e) => handleChange('name', e.target.value)}
-                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                        placeholder="Your name"
-                    />
-                </div>
-
-                <div>
-                    <label className="text-sm font-semibold text-slate-700">Email</label>
-                    <input
-                        type="email"
-                        value={form.email}
-                        onChange={(e) => handleChange('email', e.target.value)}
-                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                        placeholder="your@email.com"
-                    />
-                </div>
-
+                <TextInput
+                    label="Name"
+                    name="name"
+                    value={form.name}
+                    onChange={(value) => handleChange('name', value)}
+                    placeholder="Your name"
+                    required
+                />
+                <TextInput
+                    label="Email"
+                    name="email"
+                    type="email"
+                    value={form.email}
+                    onChange={(value) => handleChange('email', value)}
+                    placeholder="your@email.com"
+                    required
+                />
                 <div className="md:col-span-2">
-                    <label className="text-sm font-semibold text-slate-700">Comment</label>
-                    <textarea
-                        rows={4}
+                    <TextInput
+                        label="Comment"
+                        name="comment"
                         value={form.comment}
-                        onChange={(e) => handleChange('comment', e.target.value)}
-                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        onChange={(value) => handleChange('comment', value)}
                         placeholder="Write your comment"
+                        textarea
+                        required
                     />
                 </div>
 

@@ -1,14 +1,40 @@
 'use client'
 
+import { useId } from 'react'
 import { useFieldValidation } from '@/hooks/useFieldValidation'
+import { ValidatorFn } from '@/lib/validators'
 
-export function DateInput({ label, value, onChange, validators = [] }: any) {
+interface DateInputProps {
+    label: string
+    value?: string | null
+    onChange: (value: string) => void
+    validators?: ValidatorFn<string>[]
+    name?: string
+    id?: string
+    required?: boolean
+}
+
+export function DateInput({
+    label,
+    value,
+    onChange,
+    validators = [],
+    name,
+    id,
+    required,
+}: DateInputProps) {
     const { error, validate } = useFieldValidation(value, validators)
+    const reactId = useId()
+    const fieldId = id || `${name || 'date'}-${reactId}`
 
     return (
         <div className="flex w-full flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">{label}</label>
+            <label htmlFor={fieldId} className="text-sm font-medium text-gray-700">
+                {label} {required && <span className="text-red-500">*</span>}
+            </label>
             <input
+                id={fieldId}
+                name={name}
                 type="date"
                 value={value || ''}
                 onChange={(e) => onChange(e.target.value)}
@@ -22,13 +48,37 @@ export function DateInput({ label, value, onChange, validators = [] }: any) {
     )
 }
 
-export function DateTimeInput({ label, value, onChange, validators = [] }: any) {
+interface DateTimeInputProps {
+    label: string
+    value?: string | null
+    onChange: (value: string) => void
+    validators?: ValidatorFn<string>[]
+    name?: string
+    id?: string
+    required?: boolean
+}
+
+export function DateTimeInput({
+    label,
+    value,
+    onChange,
+    validators = [],
+    name,
+    id,
+    required,
+}: DateTimeInputProps) {
     const { error, validate } = useFieldValidation(value, validators)
+    const reactId = useId()
+    const fieldId = id || `${name || 'datetime'}-${reactId}`
 
     return (
         <div className="flex w-full flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">{label}</label>
+            <label htmlFor={fieldId} className="text-sm font-medium text-gray-700">
+                {label} {required && <span className="text-red-500">*</span>}
+            </label>
             <input
+                id={fieldId}
+                name={name}
                 type="datetime-local"
                 value={value || ''}
                 onChange={(e) => onChange(e.target.value)}
