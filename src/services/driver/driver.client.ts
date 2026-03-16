@@ -1,11 +1,15 @@
 'use client'
 
 import {
+    createDriverLoginAction,
     createDriverAction,
     deleteDriverAction,
     updateDriverAction,
 } from '@/services/driver/driver.actions'
-import { DriverMutationResponse } from '@/services/driver/driver.types'
+import {
+    DriverCreateLoginResponse,
+    DriverMutationResponse,
+} from '@/services/driver/driver.types'
 
 export async function createDriverClient(
     tenantSlug: string,
@@ -27,4 +31,12 @@ export async function deleteDriverClient(
     id: number | string,
 ): Promise<DriverMutationResponse> {
     return deleteDriverAction(tenantSlug, id)
+}
+
+export async function createDriverLoginClient(
+    tenantSlug: string,
+    id: number | string,
+    formData: FormData,
+): Promise<DriverCreateLoginResponse> {
+    return createDriverLoginAction(tenantSlug, id, formData)
 }

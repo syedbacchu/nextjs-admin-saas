@@ -21,6 +21,16 @@ const STATUS_OPTIONS = [
     { label: 'Inactive', value: '0' },
 ]
 
+const LOGIN_STATUS_OPTIONS = [
+    { label: 'Active', value: '1' },
+    { label: 'Inactive', value: '0' },
+]
+
+const LOGIN_ENABLE_OPTIONS = [
+    { label: 'Enabled', value: '1' },
+    { label: 'Disabled', value: '0' },
+]
+
 function toDateInputValue(value?: string | null): string {
     if (!value) return ''
     const trimmed = value.trim()
@@ -52,6 +62,21 @@ export default function DriverForm({
     const [address, setAddress] = useState(initialData?.address || '')
     const [notes, setNotes] = useState(initialData?.notes || '')
     const [status, setStatus] = useState(initialData?.status === 0 ? '0' : '1')
+    const [loginName, setLoginName] = useState(initialData?.login_account?.name || '')
+    const [loginEmail, setLoginEmail] = useState(initialData?.login_account?.email || '')
+    const [loginPhone, setLoginPhone] = useState(initialData?.login_account?.phone || '')
+    const [loginUsername, setLoginUsername] = useState(initialData?.login_account?.username || '')
+    const [loginPassword, setLoginPassword] = useState('')
+    const [loginEnableLogin, setLoginEnableLogin] = useState(
+        typeof initialData?.login_account?.enable_login === 'number'
+            ? String(initialData.login_account.enable_login)
+            : '',
+    )
+    const [loginStatus, setLoginStatus] = useState(
+        typeof initialData?.login_account?.status === 'number'
+            ? String(initialData.login_account.status)
+            : '',
+    )
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -82,6 +107,14 @@ export default function DriverForm({
             formData.append('address', address.trim())
             formData.append('notes', notes.trim())
             formData.append('status', status)
+
+            if (loginName.trim()) formData.append('login_name', loginName.trim())
+            if (loginEmail.trim()) formData.append('login_email', loginEmail.trim())
+            if (loginPhone.trim()) formData.append('login_phone', loginPhone.trim())
+            if (loginUsername.trim()) formData.append('login_username', loginUsername.trim())
+            if (loginPassword.trim()) formData.append('login_password', loginPassword.trim())
+            if (loginEnableLogin !== '') formData.append('login_enable_login', loginEnableLogin)
+            if (loginStatus !== '') formData.append('login_status', loginStatus)
 
             const res = driverId
                 ? await updateDriverClient(tenantSlug, driverId, formData)
@@ -173,6 +206,69 @@ export default function DriverForm({
                 textarea
                 rows={3}
             />
+
+            <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <div>
+                    <h3 className="text-sm font-semibold text-slate-900">Login Account (Optional)</h3>
+                    <p className="mt-1 text-xs text-slate-600">
+                        Fill these fields to create or update this driver login from driver update API.
+                    </p>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                    <TextInput
+                        label="Login Name"
+                        name="login_name"
+                        value={loginName}
+                        onChange={setLoginName}
+                        placeholder="Login Name"
+                    />
+                    <TextInput
+                        label="Login Email"
+                        name="login_email"
+                        value={loginEmail}
+                        onChange={setLoginEmail}
+                        placeholder="Login Email"
+                        type="email"
+                    />
+                    <TextInput
+                        label="Login Phone"
+                        name="login_phone"
+                        value={loginPhone}
+                        onChange={setLoginPhone}
+                        placeholder="Login Phone"
+                    />
+                    <TextInput
+                        label="Login Username"
+                        name="login_username"
+                        value={loginUsername}
+                        onChange={setLoginUsername}
+                        placeholder="Login Username"
+                    />
+                    <TextInput
+                        label="Login Password"
+                        name="login_password"
+                        value={loginPassword}
+                        onChange={setLoginPassword}
+                        placeholder="Leave blank to keep current password"
+                        type="password"
+                    />
+                    <SelectInput
+                        label="Login Enable"
+                        name="login_enable_login"
+                        value={loginEnableLogin}
+                        options={LOGIN_ENABLE_OPTIONS}
+                        onChange={setLoginEnableLogin}
+                    />
+                    <SelectInput
+                        label="Login Status"
+                        name="login_status"
+                        value={loginStatus}
+                        options={LOGIN_STATUS_OPTIONS}
+                        onChange={setLoginStatus}
+                    />
+                </div>
+            </div>
 
             <div className="flex items-center gap-3">
                 <button

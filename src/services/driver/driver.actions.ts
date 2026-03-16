@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { DriverService } from '@/services/driver/driver.service'
 import {
+    DriverCreateLoginResponse,
     DriverListResponse,
     DriverMutationResponse,
     DriverSingleResponse,
@@ -54,6 +55,19 @@ export async function deleteDriverAction(
     const res = await DriverService.delete(tenantSlug, id)
     if (res.success) {
         revalidatePath(`/${tenantSlug}/drivers`)
+    }
+    return res
+}
+
+export async function createDriverLoginAction(
+    tenantSlug: string,
+    id: number | string,
+    formData: FormData,
+): Promise<DriverCreateLoginResponse> {
+    const res = await DriverService.createLogin(tenantSlug, id, formData)
+    if (res.success) {
+        revalidatePath(`/${tenantSlug}/drivers`)
+        revalidatePath(`/${tenantSlug}/drivers/${id}`)
     }
     return res
 }

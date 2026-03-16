@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/auth.store'
 import LogoutButton from '@/components/LogoutButton'
 import {
     CarFront,
+    ChevronDown,
     CreditCard,
     LayoutDashboard,
     Menu,
@@ -25,6 +26,9 @@ export default function AdminHeader() {
     const [collapsed, setCollapsed] = useState(false)
     const [mobileOpen, setMobileOpen] = useState(false)
     const tenantSlug = typeof params?.tenant_slug === 'string' ? params.tenant_slug : ''
+    const isDriversRoute = pathname?.startsWith(`/${tenantSlug}/drivers`)
+    const [driversMenuOpen, setDriversMenuOpen] = useState(Boolean(isDriversRoute))
+    const isDriversMenuOpen = Boolean(isDriversRoute) || driversMenuOpen
 
     const navLinks = useMemo(() => ([
         {
@@ -52,10 +56,23 @@ export default function AdminHeader() {
             isActive: pathname?.startsWith(`/${tenantSlug}/vehicles`),
         },
         {
-            name: 'Drivers',
-            href: tenantSlug ? `/${tenantSlug}/drivers` : '#',
+            name: 'Staff',
+            href: tenantSlug ? `/${tenantSlug}/staff` : '#',
             icon: Users,
-            isActive: pathname?.startsWith(`/${tenantSlug}/drivers`),
+            isActive: pathname?.startsWith(`/${tenantSlug}/staff`),
+        },
+    ]), [pathname, tenantSlug])
+
+    const driverSubLinks = useMemo(() => ([
+        {
+            name: 'Driver List',
+            href: tenantSlug ? `/${tenantSlug}/drivers` : '#',
+            isActive: pathname === `/${tenantSlug}/drivers`,
+        },
+        {
+            name: 'Add Driver',
+            href: tenantSlug ? `/${tenantSlug}/drivers/create` : '#',
+            isActive: pathname === `/${tenantSlug}/drivers/create`,
         },
     ]), [pathname, tenantSlug])
 
@@ -163,6 +180,58 @@ export default function AdminHeader() {
                             {!collapsed && link.name}
                         </Link>
                     ))}
+
+                    {collapsed ? (
+                        <Link
+                            href={tenantSlug ? `/${tenantSlug}/drivers` : '#'}
+                            onClick={() => setMobileOpen(false)}
+                            title="Drivers"
+                            className={`flex items-center justify-center rounded-lg px-2 py-2 text-sm font-medium transition-colors ${
+                                isDriversRoute
+                                    ? 'bg-slate-900 text-white'
+                                    : 'text-slate-700 hover:bg-slate-100'
+                            }`}
+                        >
+                            <Users className="h-4 w-4" />
+                        </Link>
+                    ) : (
+                        <div className="space-y-1">
+                            <button
+                                type="button"
+                                onClick={() => setDriversMenuOpen((prev) => !prev)}
+                                className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                                    isDriversRoute
+                                        ? 'bg-slate-900 text-white'
+                                        : 'text-slate-700 hover:bg-slate-100'
+                                }`}
+                            >
+                                <span className="flex items-center gap-2">
+                                    <Users className="h-4 w-4" />
+                                    Drivers
+                                </span>
+                                <ChevronDown className={`h-4 w-4 transition-transform ${isDriversMenuOpen ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            {isDriversMenuOpen && (
+                                <div className="space-y-1 pl-9">
+                                    {driverSubLinks.map((subLink) => (
+                                        <Link
+                                            key={subLink.name}
+                                            href={subLink.href}
+                                            onClick={() => setMobileOpen(false)}
+                                            className={`block rounded-md px-3 py-1.5 text-sm transition-colors ${
+                                                subLink.isActive
+                                                    ? 'bg-slate-100 text-slate-900 font-medium'
+                                                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                                            }`}
+                                        >
+                                            {subLink.name}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </nav>
 
                 <div className={`mt-auto border-t border-slate-200 px-4 pt-4 pb-6 ${collapsed ? 'md:px-2' : 'md:px-6'}`}>

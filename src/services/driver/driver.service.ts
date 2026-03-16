@@ -1,8 +1,10 @@
 import { request } from '@/lib/http/request'
 import {
     Driver,
+    DriverCreateLoginResponse,
     DriverListData,
     DriverListResponse,
+    DriverLoginAccount,
     DriverMutationResponse,
     DriverSingleResponse,
 } from '@/services/driver/driver.types'
@@ -43,6 +45,18 @@ export const DriverService = {
         return request<unknown[]>({
             method: 'DELETE',
             url: `/tenant/${encodeURIComponent(tenantSlug)}/drivers/${id}`,
+        })
+    },
+
+    createLogin(
+        tenantSlug: string,
+        id: number | string,
+        data: FormData,
+    ): Promise<DriverCreateLoginResponse> {
+        return request<DriverLoginAccount>({
+            method: 'POST',
+            url: `/tenant/${encodeURIComponent(tenantSlug)}/account/drivers/${id}/create-login`,
+            data,
         })
     },
 }

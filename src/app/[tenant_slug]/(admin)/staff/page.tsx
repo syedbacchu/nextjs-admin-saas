@@ -6,11 +6,11 @@ import { toast } from 'sonner'
 import DynamicTable from '@/components/ui/DynamicTable'
 import TableActions from '@/components/ui/TableActions'
 import { ColumnDef } from '@/types/api'
-import { getDriversAction } from '@/services/driver/driver.actions'
-import { deleteDriverClient } from '@/services/driver/driver.client'
-import { Driver, DriverListResponse } from '@/services/driver/driver.types'
+import { getStaffsAction } from '@/services/staff/staff.actions'
+import { deleteStaffClient } from '@/services/staff/staff.client'
+import { Staff, StaffListResponse } from '@/services/staff/staff.types'
 
-const EMPTY_DRIVER_LIST: DriverListResponse = {
+const EMPTY_STAFF_LIST: StaffListResponse = {
     success: false,
     message: 'Invalid tenant',
     status: 400,
@@ -24,42 +24,22 @@ const EMPTY_DRIVER_LIST: DriverListResponse = {
     },
 }
 
-function formatDate(value?: string | null): string {
-    if (!value) return 'N/A'
-    const date = new Date(value)
-    if (Number.isNaN(date.getTime())) return 'N/A'
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-    })
-}
-
-function hasDriverLogin(driver: Driver): boolean {
-    if (typeof driver.login_enabled === 'boolean') return driver.login_enabled
-    if (typeof driver.has_login_account === 'boolean') return driver.has_login_account
-    return Boolean(driver.login_account)
-}
-
-export default function DriversPage() {
+export default function StaffPage() {
     const router = useRouter()
     const params = useParams<{ tenant_slug?: string }>()
     const tenantSlug = String(params?.tenant_slug || '').trim()
     const [refreshKey, setRefreshKey] = useState(0)
 
-    const columns: ColumnDef<Driver>[] = [
+    const columns: ColumnDef<Staff>[] = [
         {
             header: '#',
             cell: (_item, index) => <span className="text-slate-500">{index + 1}</span>,
             className: 'w-12',
         },
         { header: 'Name', accessorKey: 'name' },
-        { header: 'Phone', accessorKey: 'phone' },
-        { header: 'License', accessorKey: 'license_no' },
-        {
-            header: 'Joining Date',
-            cell: (item) => <span>{formatDate(item.joining_date)}</span>,
-        },
+        { header: 'Username', accessorKey: 'username' },
+        { header: 'Email', cell: (item) => <span>{item.email || 'N/A'}</span> },
+        { header: 'Phone', cell: (item) => <span>{item.phone || 'N/A'}</span> },
         {
             header: 'Status',
             cell: (item) => (
@@ -76,11 +56,11 @@ export default function DriversPage() {
             header: 'Login',
             cell: (item) => (
                 <span className={`rounded-full px-2 py-1 text-xs font-semibold ${
-                    hasDriverLogin(item)
+                    item.enable_login === 1
                         ? 'bg-blue-100 text-blue-700'
                         : 'bg-slate-100 text-slate-700'
                 }`}>
-                    {hasDriverLogin(item) ? 'Enabled' : 'Not Enabled'}
+                    {item.enable_login === 1 ? 'Enabled' : 'Disabled'}
                 </span>
             ),
         },
@@ -93,17 +73,17 @@ export default function DriversPage() {
                     hasView
                     hasEdit
                     hasDelete
-                    viewLink={`/${tenantSlug}/drivers/${item.id}`}
-                    editLink={`/${tenantSlug}/drivers/${item.id}/edit`}
+                    viewLink={`/${tenantSlug}/staff/${item.id}`}
+                    editLink={`/${tenantSlug}/staff/${item.id}/edit`}
                     onDelete={handleDelete}
                 />
             ),
         },
     ]
 
-    async function fetchDrivers(page: number, search: string) {
-        if (!tenantSlug) return EMPTY_DRIVER_LIST
-        return getDriversAction(tenantSlug, page, search)
+    async function fetchStaff(page: number, search: string) {
+        if (!tenantSlug) return EMPTY_STAFF_LIST
+        return getStaffsAction(tenantSlug, page, search)
     }
 
     async function handleDelete(id: number | string) {
@@ -112,32 +92,32 @@ export default function DriversPage() {
             return
         }
 
-        const res = await deleteDriverClient(tenantSlug, id)
+        const res = await deleteStaffClient(tenantSlug, id)
 
         if (res.success) {
-            toast.success(res.message || 'Driver deleted successfully')
+            toast.success(res.message || 'Staff deleted successfully')
             setRefreshKey((prev) => prev + 1)
         } else {
-            toast.error(res.message || 'Failed to delete driver')
+            toast.error(res.message || 'Failed to delete staff')
         }
     }
 
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-slate-900">Driver Management</h1>
+                <h1 className="text-2xl font-bold text-slate-900">Staff Management</h1>
                 <button
-                    onClick={() => router.push(`/${tenantSlug}/drivers/create`)}
+                    onClick={() => router.push(`/${tenantSlug}/staff/create`)}
                     className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
                 >
-                    + Add Driver
+                    + Add Staff
                 </button>
             </div>
 
             <DynamicTable
                 key={refreshKey}
-                title="Drivers"
-                fetchData={fetchDrivers}
+                title="Staff"
+                fetchData={fetchStaff}
                 columns={columns}
             />
         </div>
