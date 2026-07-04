@@ -3,8 +3,6 @@ import { getRequestLanguage } from '@/i18n/server'
 import { translateUiText } from '@/i18n/ui'
 import { getDashboardSummaryAction } from '@/features/dashboard'
 import { constructMetadata } from '@/lib/seo'
-import VehicleAlertsSlider from '@/features/dashboard/components/VehicleAlertsSlider'
-import MaintenanceAlertsSlider from '@/features/dashboard/components/MaintenanceAlertsSlider'
 
 export const revalidate = 10
 
@@ -72,11 +70,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
     const dashboard = res.data
 
     // Check if financial_summary is valid (not empty array)
-    const hasFinancialData = Array.isArray(dashboard.financial_summary) === false &&
-                           dashboard.financial_summary &&
-                           dashboard.financial_summary.income &&
-                           dashboard.financial_summary.expenses &&
-                           dashboard.financial_summary.summary
+    const hasFinancialData = false
 
     return (
         <div className="mx-auto space-y-6">
@@ -100,7 +94,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <span className="text-lg">🚗</span>
                             </div>
                             <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">{translateUiText('Vehicles', language)}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">{translateUiText('Demo', language)}</p>
                                 <p className="mt-1 text-2xl font-bold text-emerald-900">{dashboard.entity_counts.vehicles.total}</p>
                                 <p className="text-xs text-emerald-600">{translateUiText('Active', language)}: {dashboard.entity_counts.vehicles.active}</p>
                             </div>
@@ -113,7 +107,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <span className="text-lg">👥</span>
                             </div>
                             <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-purple-700">{translateUiText('Customers', language)}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-purple-700">{translateUiText('Demo', language)}</p>
                                 <p className="mt-1 text-2xl font-bold text-purple-900">{dashboard.entity_counts.customers.total}</p>
                                 <p className="text-xs text-purple-600">{translateUiText('Active', language)}: {dashboard.entity_counts.customers.active}</p>
                             </div>
@@ -126,7 +120,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <span className="text-lg">👨‍✈️</span>
                             </div>
                             <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">{translateUiText('Drivers', language)}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">{translateUiText('Demo', language)}</p>
                                 <p className="mt-1 text-2xl font-bold text-blue-900">{dashboard.entity_counts.drivers.total}</p>
                                 <p className="text-xs text-blue-600">{translateUiText('Active', language)}: {dashboard.entity_counts.drivers.active}</p>
                             </div>
@@ -139,7 +133,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <span className="text-lg">🏢</span>
                             </div>
                             <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-orange-700">{translateUiText('Suppliers', language)}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-orange-700">{translateUiText('Demo', language)}</p>
                                 <p className="mt-1 text-2xl font-bold text-orange-900">{dashboard.entity_counts.suppliers.total}</p>
                                 <p className="text-xs text-orange-600">{translateUiText('Active', language)}: {dashboard.entity_counts.suppliers.active}</p>
                             </div>
@@ -152,7 +146,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <span className="text-lg">👷</span>
                             </div>
                             <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">{translateUiText('Employees', language)}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">{translateUiText('Demo', language)}</p>
                                 <p className="mt-1 text-2xl font-bold text-teal-900">{dashboard.entity_counts.employees.total}</p>
                                 <p className="text-xs text-teal-600">{translateUiText('Active', language)}: {dashboard.entity_counts.employees.active}</p>
                             </div>
@@ -165,7 +159,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <span className="text-lg">🏪</span>
                             </div>
                             <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-pink-700">{translateUiText('Vendors', language)}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-pink-700">{translateUiText('Demo', language)}</p>
                                 <p className="mt-1 text-2xl font-bold text-pink-900">{dashboard.entity_counts.vendors.total}</p>
                                 <p className="text-xs text-pink-600">{translateUiText('Active', language)}: {dashboard.entity_counts.vendors.active}</p>
                             </div>
@@ -178,7 +172,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <span className="text-lg">🤝</span>
                             </div>
                             <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-indigo-700">{translateUiText('Helpers', language)}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-indigo-700">{translateUiText('Demo', language)}</p>
                                 <p className="mt-1 text-2xl font-bold text-indigo-900">{dashboard.entity_counts.helpers.total}</p>
                                 <p className="text-xs text-indigo-600">{translateUiText('Active', language)}: {dashboard.entity_counts.helpers.active}</p>
                             </div>
@@ -191,7 +185,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <span className="text-lg">👔</span>
                             </div>
                             <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">{translateUiText('Supervisors', language)}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">{translateUiText('Demo', language)}</p>
                                 <p className="mt-1 text-2xl font-bold text-cyan-900">{dashboard.entity_counts.supervisors.total}</p>
                                 <p className="text-xs text-cyan-600">{translateUiText('Active', language)}: {dashboard.entity_counts.supervisors.active}</p>
                             </div>
@@ -204,7 +198,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <span className="text-lg">🏛️</span>
                             </div>
                             <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">{translateUiText('Offices', language)}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">{translateUiText('Demo', language)}</p>
                                 <p className="mt-1 text-2xl font-bold text-amber-900">{dashboard.entity_counts.offices.total}</p>
                                 <p className="text-xs text-amber-600">{translateUiText('Active', language)}: {dashboard.entity_counts.offices.active}</p>
                             </div>
@@ -217,7 +211,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <span className="text-lg">🚛</span>
                             </div>
                             <div className="flex-1">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-rose-700">{translateUiText('Trips', language)}</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-rose-700">{translateUiText('Demo', language)}</p>
                                 <p className="mt-1 text-2xl font-bold text-rose-900">{dashboard.entity_counts.trips.total}</p>
                                 <p className="text-xs text-rose-600">{translateUiText('Active', language)}: {dashboard.entity_counts.trips.active}</p>
                                 <div className="mt-1 space-y-0.5">
@@ -242,7 +236,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-slate-800">{translateUiText('No Financial Data Available', language)}</h3>
-                                <p className="text-sm text-slate-600 mt-1">{translateUiText('Start creating trips to see your financial summary here.', language)}</p>
+                                <p className="text-sm text-slate-600 mt-1">{translateUiText('Start creating data to see your financial summary here.', language)}</p>
                             </div>
                         </div>
                     </div>
@@ -254,7 +248,7 @@ export default async function HomePage({ params }: DashboardPageProps) {
                                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500">
                                     <span className="text-2xl">💰</span>
                                 </div>
-                                <h3 className="text-lg font-bold text-emerald-800">{translateUiText('Income', language)}</h3>
+                                <h3 className="text-lg font-bold text-emerald-800">{translateUiText('Demo', language)}</h3>
                             </div>
                             <div className="space-y-3 text-sm">
                                 <div className="flex justify-between items-center pb-2 border-b border-emerald-200">
@@ -347,98 +341,6 @@ export default async function HomePage({ params }: DashboardPageProps) {
                 )}
             </section>
 
-            {/* Alerts Section - Component-based */}
-            <div className="grid gap-6 md:grid-cols-2">
-                {/* Vehicle Alerts Slider */}
-                <section className="rounded-2xl border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 p-6 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500">
-                                <span className="text-xl">🚗</span>
-                            </div>
-                            <h2 className="text-lg font-semibold text-orange-900">{translateUiText('Vehicle Alerts', language)}</h2>
-                        </div>
-                        <div className="flex gap-2">
-                            {dashboard.vehicle_alerts.expired_count > 0 && (
-                                <span className="px-3 py-1 text-xs font-bold rounded-full bg-red-500 text-white shadow-sm">
-                                    {dashboard.vehicle_alerts.expired_count} {translateUiText('Expired', language)}
-                                </span>
-                            )}
-                            <span className="px-3 py-1 text-xs font-bold rounded-full bg-orange-500 text-white shadow-sm">
-                                {dashboard.vehicle_alerts.total_alerts} {translateUiText('Total', language)}
-                            </span>
-                        </div>
-                    </div>
-
-                    <VehicleAlertsSlider
-                        vehicles={dashboard.vehicle_alerts.vehicles}
-                        expiredCount={dashboard.vehicle_alerts.expired_count}
-                        totalAlerts={dashboard.vehicle_alerts.total_alerts}
-                        tenantSlug={tenantSlug}
-                    />
-
-                    {/* Show More Button */}
-                    <div className="flex justify-end mt-4">
-                        <a
-                            href={`/${tenantSlug}/vehicle-alerts`}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
-                        >
-                            {translateUiText('Show More', language)}
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                        </a>
-                    </div>
-                </section>
-
-                {/* Maintenance Alerts Slider */}
-                <section className="rounded-2xl border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 to-cyan-100 p-6 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500">
-                                <span className="text-xl">🔧</span>
-                            </div>
-                            <h2 className="text-lg font-semibold text-cyan-900">{translateUiText('Maintenance Alerts', language)}</h2>
-                        </div>
-                        <div className="flex gap-2">
-                            {dashboard.maintenance_alerts.overdue_count > 0 && (
-                                <span className="px-3 py-1 text-xs font-bold rounded-full bg-red-500 text-white shadow-sm">
-                                    {dashboard.maintenance_alerts.overdue_count} {translateUiText('Overdue', language)}
-                                </span>
-                            )}
-                            {dashboard.maintenance_alerts.critical_count > 0 && (
-                                <span className="px-3 py-1 text-xs font-bold rounded-full bg-orange-500 text-white shadow-sm">
-                                    {dashboard.maintenance_alerts.critical_count} {translateUiText('Critical', language)}
-                                </span>
-                            )}
-                            <span className="px-3 py-1 text-xs font-bold rounded-full bg-cyan-500 text-white shadow-sm">
-                                {dashboard.maintenance_alerts.total_alerts} {translateUiText('Total', language)}
-                            </span>
-                        </div>
-                    </div>
-
-                    <MaintenanceAlertsSlider
-                        services={dashboard.maintenance_alerts.services}
-                        overdueCount={dashboard.maintenance_alerts.overdue_count}
-                        criticalCount={dashboard.maintenance_alerts.critical_count}
-                        totalAlerts={dashboard.maintenance_alerts.total_alerts}
-                        tenantSlug={tenantSlug}
-                    />
-
-                    {/* Show More Button */}
-                    <div className="flex justify-end mt-4">
-                        <a
-                            href={`/${tenantSlug}/maintenance-alerts`}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
-                        >
-                            {translateUiText('Show More', language)}
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                        </a>
-                    </div>
-                </section>
-            </div>
         </div>
     )
 }

@@ -88,55 +88,12 @@ export default function AdminHeader({ logoSrc, currentUser = null }: AdminHeader
                 icon: Building2,
                 children: [
                     { name: t('admin', 'settings'), href: tenantSlug ? `${base}/settings` : '#', icon: Settings, featureKey: 'support.settings' },
-                    { name: t('admin', 'drivers'), href: tenantSlug ? `${base}/drivers` : '#', icon: Users, featureKey: 'driver.management'},
-                    { name: t('admin', 'supervisors'), href: tenantSlug ? `${base}/supervisors` : '#', icon: Users, featureKey: 'supervisor.management' },
-                    { name: t('admin', 'vehicles'), href: tenantSlug ? `${base}/vehicles` : '#', icon: CarFront, featureKey: 'vehicle.management' },
                     { name: t('admin', 'customers'), href: tenantSlug ? `${base}/customers` : '#', icon: User, featureKey: 'customer.management' },
-                    { name: t('admin', 'suppliers'), href: tenantSlug ? `${base}/suppliers` : '#', icon: Users, featureKey: 'supplier.management' },
-                    { name: t('admin', 'routePricings'), href: tenantSlug ? `${base}/route-pricings` : '#', icon: CarFront, featureKey: 'route.pricing' },
-                    { name: t('admin', 'helpers'), href: tenantSlug ? `${base}/helpers` : '#', icon: Users, featureKey: 'helper.management'  },
                     { name: t('admin', 'offices'), href: tenantSlug ? `${base}/offices` : '#', icon: Building2, featureKey: 'office.management'  },
                     { name: t('admin', 'files'), href: tenantSlug ? `${base}/files` : '#', icon: Building2, featureKey: 'data.file_management'  },
                 ],
             },
-            {
-                id: 'trip-management',
-                name: t('admin', 'tripManagement'),
-                href: tenantSlug ? `${base}/trips` : '#',
-                icon: CarFront,
-                featureKey: 'trip.monitoring',
-            },
-            {
-                id: 'billing',
-                name: t('admin', 'billing'),
-                icon: ReceiptText,
-                children: [
-                    { name: t('admin', 'pendingTrips'), href: tenantSlug ? `${base}/billing/pending-trips` : '#', icon: ReceiptText },
-                    { name: t('admin', 'submittedTrips'), href: tenantSlug ? `${base}/billing/submitted-trips` : '#', icon: ReceiptText },
-                    { name: t('admin', 'allTrips'), href: tenantSlug ? `${base}/billing/all-trips` : '#', icon: ReceiptText },
-                ],
-                featureKey: 'trip.billing',
-            },
-            {
-                id: 'vendor-management',
-                name: t('admin', 'vendorManagement'),
-                icon: Users,
-                featureKey: 'vendor.management',
-                children: [
-                    { name: t('admin', 'vendors'), href: tenantSlug ? `${base}/vendors` : '#', icon: Users },
-                    { name: t('admin', 'rentVehicles'), href: tenantSlug ? `${base}/rent-vehicles` : '#', icon: CarFront, featureKey: 'vendor.rent_vehicles' },
-                ],
-            },
-            {
-                id: 'fuel-management',
-                name: t('admin', 'fuelManagement'),
-                icon: ReceiptText,
-                featureKey: 'fuel.management',
-                children: [
-                    { name: t('admin', 'fuelPurchases'), href: tenantSlug ? `${base}/fuel-purchases` : '#', icon: ReceiptText },
-                    { name: t('admin', 'fuelLedger'), href: tenantSlug ? `${base}/fuel-ledger` : '#', icon: ReceiptText, featureKey: 'fuel.ledger_tracking' },
-                ],
-            },
+
             {
                 id: 'expense',
                 name: t('admin', 'expense'),
@@ -146,16 +103,7 @@ export default function AdminHeader({ logoSrc, currentUser = null }: AdminHeader
                     { name: t('admin', 'officeExpenses'), href: tenantSlug ? `${base}/daily-office-expenses` : '#', icon: ReceiptText },
                 ],
             },
-            {
-                id: 'purchase-management',
-                name: t('admin', 'purchaseManagement'),
-                icon: ReceiptText,
-                featureKey: 'service.maintenance_services',
-                children: [
-                    { name: t('admin', 'maintenancePurchases'), href: tenantSlug ? `${base}/maintenance-purchases` : '#', icon: ReceiptText },
-                    { name: t('admin', 'officialProductPurchases'), href: tenantSlug ? `${base}/official-product-purchases` : '#', icon: ReceiptText, featureKey: 'parts.stock_management' },
-                ],
-            },
+
             {
                 id: 'hr-payroll',
                 name: t('admin', 'hrPayroll'),
@@ -176,17 +124,6 @@ export default function AdminHeader({ logoSrc, currentUser = null }: AdminHeader
                 name: t('admin', 'accounts'),
                 icon: CreditCard,
                 children: [
-                    { name: t('admin', 'fundTransfers'), href: tenantSlug ? `${base}/fund-transfers` : '#', icon: ReceiptText, featureKey:'fund.transfer' },
-                    { name: t('admin', 'supplierPayments'), href: tenantSlug ? `${base}/supplier-payments` : '#', icon: ReceiptText, featureKey:'supplier.payment' },
-                    { name: t('admin', 'tripPaymentReceives'), href: tenantSlug ? `${base}/trip-payment-receives` : '#',featureKey: 'receivable.tracking', icon: ReceiptText },
-                    { name: t('admin', 'tripVendorPayments'), href: tenantSlug ? `${base}/trip-vendor-payments` : '#',featureKey: 'vendor.payment', icon: ReceiptText },
-                    { name: t('admin', 'tripDriverPayments'), href: tenantSlug ? `${base}/trip-driver-payments` : '#',featureKey: 'driver.payment_tracking', icon: ReceiptText },
-                    { name: t('admin', 'supplierLedger'), href: tenantSlug ? `${base}/supplier-ledger` : '#', icon: ReceiptText, featureKey:'supplier.ledger'},
-                    { name: t('admin', 'customerLedger'), href: tenantSlug ? `${base}/customer-ledger` : '#', icon: ReceiptText, featureKey: 'customer.ledger'},
-                    { name: t('admin', 'vendorLedger'), href: tenantSlug ? `${base}/vendor-ledger` : '#', icon: ReceiptText, featureKey:'vendor.ledger' },
-                    { name: t('admin', 'driverLedger'), href: tenantSlug ? `${base}/driver-ledger` : '#', icon: ReceiptText, featureKey:'driver.ledger' },
-                    { name: t('admin', 'helperLedger'), href: tenantSlug ? `${base}/helper-ledger` : '#', icon: ReceiptText, featureKey:'helper.ledger' },
-                    { name: t('admin', 'supervisorLedger'), href: tenantSlug ? `${base}/supervisor-ledger` : '#', icon: ReceiptText, featureKey:'supervisor.ledger' },
                     { name: t('admin', 'employeeLedger'), href: tenantSlug ? `${base}/employee-ledger` : '#', icon: ReceiptText, featureKey:'employee.ledger' },
 
                 ],
@@ -198,9 +135,6 @@ export default function AdminHeader({ logoSrc, currentUser = null }: AdminHeader
                 featureKey: 'reports.basic',
                 children: [
                     { name: t('admin', 'yearlyProfitLossReport'), href: tenantSlug ? `${base}/reports/yearly-profit-loss` : '#', icon: ReceiptText, featureKey: 'reports.profit_loss' },
-                    { name: t('admin', 'monthlyProfitLossReport'), href: tenantSlug ? `${base}/reports/monthly-profit-loss` : '#', icon: ReceiptText, featureKey: 'reports.profit_loss' },
-                    { name: t('admin', 'dailyProfitLossReport'), href: tenantSlug ? `${base}/reports/daily-profit-loss` : '#', icon: ReceiptText, featureKey: 'reports.profit_loss' },
-                    { name: t('admin', 'vehicleWiseReport'), href: tenantSlug ? `${base}/reports/vehicle-wise` : '#', icon: CarFront, featureKey: 'reports.vehicle_wise' },
                 ],
             },
 

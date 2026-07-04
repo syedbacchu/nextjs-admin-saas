@@ -344,6 +344,7 @@ export const bnUiTranslations: UiTranslationBundle = {
         'Payment Receives': 'পেমেন্ট গ্রহণসমূহ',
         'Vendor Payments': 'ভেন্ডর পেমেন্টসমূহ',
         Vehicles: 'যানবাহনসমূহ',
+        Demo: 'ডেমো',
         Customers: 'গ্রাহকসমূহ',
         'Route Pricings': 'রুট প্রাইসিংসমূহ',
         Helpers: 'হেল্পারসমূহ',
