@@ -59,7 +59,7 @@ export default function CustomerCreateModal({
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-purple-900 bg-opacity-50">
             <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
                 <h3 className="mb-4 text-lg font-semibold text-slate-900">Add New Customer</h3>
 

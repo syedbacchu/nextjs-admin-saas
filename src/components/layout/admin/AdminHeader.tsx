@@ -215,7 +215,7 @@ export default function AdminHeader({ logoSrc, currentUser = null }: AdminHeader
                 <button
                     type="button"
                     aria-label={t('admin', 'closeSidebar')}
-                    className="fixed inset-0 z-40 bg-black/40 md:hidden"
+                    className="fixed inset-0 z-40 bg-purple-900/40 md:hidden"
                     onClick={() => setMobileOpen(false)}
                 />
             )}
@@ -313,7 +313,7 @@ export default function AdminHeader({ logoSrc, currentUser = null }: AdminHeader
                                     onClick={() => setMobileOpen(false)}
                                     title={link.name}
                                     className={`flex items-center justify-center rounded-lg px-2 py-2 text-sm font-medium transition-colors ${
-                                        linkIsActive ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100'
+                                        linkIsActive ? 'bg-purple-800 text-white' : 'text-slate-700 hover:bg-slate-100'
                                     }`}
                                 >
                                     <link.icon className="h-4 w-4" />
@@ -334,7 +334,7 @@ export default function AdminHeader({ logoSrc, currentUser = null }: AdminHeader
                                         href={section.href}
                                         onClick={() => setMobileOpen(false)}
                                         className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                                            sectionIsActive ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100'
+                                            sectionIsActive ? 'bg-purple-800 text-white' : 'text-slate-700 hover:bg-slate-100'
                                         }`}
                                     >
                                         <section.icon className="h-4 w-4" />
@@ -354,7 +354,7 @@ export default function AdminHeader({ logoSrc, currentUser = null }: AdminHeader
                                             }))
                                         }
                                         className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
-                                            sectionIsActive ? 'bg-slate-900 text-white' : 'text-slate-800 hover:bg-slate-100'
+                                            sectionIsActive ? 'bg-purple-800 text-white' : 'text-slate-800 hover:bg-slate-100'
                                         }`}
                                     >
                                         <span className="flex items-center gap-2">

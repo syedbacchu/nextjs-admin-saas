@@ -246,7 +246,7 @@ export default function FilesContent() {
                     <button
                         type="submit"
                         disabled={uploading}
-                        className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60"
+                        className="rounded-lg bg-purple-800 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700 disabled:opacity-60"
                     >
                         {uploading ? 'Uploading...' : 'Upload'}
                     </button>
@@ -264,7 +264,7 @@ export default function FilesContent() {
             />
 
             {editItem && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-purple-900/40 p-4">
                     <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl">
                         <div className="mb-4">
                             <h2 className="text-xl font-bold text-slate-900">Edit File Metadata</h2>
@@ -334,7 +334,7 @@ export default function FilesContent() {
                                 <button
                                     type="submit"
                                     disabled={savingMeta}
-                                    className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60"
+                                    className="rounded-lg bg-purple-800 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700 disabled:opacity-60"
                                 >
                                     {savingMeta ? 'Saving...' : 'Update Metadata'}
                                 </button>

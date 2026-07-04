@@ -147,7 +147,7 @@ export default function StaffPage() {
                     <StaffLimitGuard currentUsage={currentStaffCount}>
                         <button
                             onClick={() => router.push(`/${tenantSlug}/staff/create`)}
-                            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+                            className="rounded-lg bg-purple-800 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700"
                         >
                             + Add Staff
                         </button>
@@ -163,7 +163,7 @@ export default function StaffPage() {
             />
 
             {featureModalOpen && selectedStaff && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-purple-900 bg-opacity-50 p-4">
                     <div className="w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl">
                         <StaffFeatureAccess
                             tenantSlug={tenantSlug}

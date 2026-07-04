@@ -76,9 +76,9 @@ export default function Header() {
                         aria-label={t('header', 'toggleMenu')}
                     >
                         <div className="w-5 h-4 flex flex-col justify-between">
-                            <span className={`block w-5 h-0.5 bg-black transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
-                            <span className={`block w-5 h-0.5 bg-black transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} />
-                            <span className={`block w-5 h-0.5 bg-black transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
+                            <span className={`block w-5 h-0.5 bg-purple-800 transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
+                            <span className={`block w-5 h-0.5 bg-purple-800 transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} />
+                            <span className={`block w-5 h-0.5 bg-purple-800 transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
                         </div>
                     </button>
 

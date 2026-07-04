@@ -37,7 +37,7 @@ export default function GenericImageDisplay({
             {/* Modal for full image */}
             {isModalOpen && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-purple-900 bg-opacity-75 p-4"
                     onClick={() => setIsModalOpen(false)}
                 >
                     <div className="relative max-h-[90vh] max-w-[90vw]">

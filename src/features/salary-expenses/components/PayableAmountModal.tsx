@@ -53,7 +53,7 @@ export default function PayableAmountModal({
     if (!isOpen) return null
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-purple-900/50 p-4">
             <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl">
                 <div className="flex items-center justify-between border-b border-slate-200 p-6">
                     <h3 className="text-lg font-semibold text-slate-900">Payable Amount Details</h3>
@@ -99,7 +99,7 @@ export default function PayableAmountModal({
                                     </p>
                                 </div>
 
-                                <div className="col-span-2 rounded-lg border-2 border-slate-900 bg-slate-900 p-4">
+                                <div className="col-span-2 rounded-lg border-2 border-purple-900 bg-purple-800 p-4">
                                     <p className="text-sm text-slate-300">Due Amount</p>
                                     <p className="mt-1 text-2xl font-bold text-white">
                                         BDT {' '}

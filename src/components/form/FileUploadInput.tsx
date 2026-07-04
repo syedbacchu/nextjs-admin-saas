@@ -100,7 +100,7 @@ export default function FileUploadInput({
                             className="w-full h-full object-contain rounded"
                         />
                         {/* Added group-hover to ensure this shows up when hovering the parent div */}
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white text-sm font-medium rounded">
+                        <div className="absolute inset-0 bg-purple-900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white text-sm font-medium rounded">
                             {translateUiText('Click to Change', language)}
                         </div>
                     </div>

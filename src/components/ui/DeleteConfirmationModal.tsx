@@ -31,7 +31,7 @@ export default function DeleteConfirmationModal({
     const confirmText = translateUiText('Yes, Delete', language)
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fadeIn">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-purple-900/50 backdrop-blur-sm p-4 animate-fadeIn">
             <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
                 {/* Header with Warning Icon */}
                 <div className="bg-gradient-to-br from-red-50 to-red-100 p-6 flex flex-col items-center border-b border-red-200">

@@ -135,7 +135,7 @@ export default function DynamicTable<T extends { id: number | string }>({
 
             <div className="overflow-x-auto relative h-[600px] overflow-y-auto border rounded">
                 <table className="w-full text-left text-sm text-gray-600">
-                    <thead className="bg-black text-white text-xs uppercase sticky top-0 z-10">
+                    <thead className="bg-purple-800 text-white text-xs uppercase sticky top-0 z-10">
                     <tr>
                         {columns.map((col, index) => (
                             <th key={index} className={`px-4 py-3 font-medium text-white ${col.className || ''}`}>
