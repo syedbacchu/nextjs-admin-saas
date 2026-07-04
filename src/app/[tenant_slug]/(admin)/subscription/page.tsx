@@ -1,4 +1,6 @@
-import { getSubscriptionDetailsAction } from '@/services/subscription/subscription.actions'
+import { Metadata } from 'next'
+import { constructMetadata } from '@/lib/seo'
+import { getSubscriptionDetailsAction } from '@/features/subscription'
 
 interface SubscriptionPageProps {
     params: Promise<{
@@ -6,6 +8,15 @@ interface SubscriptionPageProps {
     }> | {
         tenant_slug: string
     }
+}
+
+export async function generateMetadata({ params }: SubscriptionPageProps): Promise<Metadata> {
+    const { tenant_slug } = await params
+    return constructMetadata({
+        title: `Subscription - ${tenant_slug}`,
+        description: 'View your subscription details and payment summary',
+        noIndex: true,
+    })
 }
 
 function formatDate(value?: string | null): string {
@@ -56,7 +67,7 @@ export default async function SubscriptionPage({ params }: SubscriptionPageProps
     const featureEntries = Object.entries(details.features || {}).sort(([a], [b]) => a.localeCompare(b))
 
     return (
-        <div className="mx-auto max-w-6xl space-y-6">
+        <div className="mx-auto space-y-6">
             <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>

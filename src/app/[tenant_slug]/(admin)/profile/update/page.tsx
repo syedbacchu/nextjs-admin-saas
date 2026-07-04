@@ -1,6 +1,5 @@
 
-import ProfileSettingsForm from '@/components/ProfileSettingsForm'
-import { getProfileAction } from '@/services/profile/profile.actions'
+import { getProfileAction, ProfileSettingsForm } from '@/features/profile'
 
 interface UpdateProfilePageProps {
     params: Promise<{

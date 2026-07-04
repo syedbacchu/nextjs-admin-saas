@@ -1,1 +1,1 @@
-export { loginClient } from '@/services/auth/auth.client'
+export { loginClient } from '@/features/auth/actions/auth.client'

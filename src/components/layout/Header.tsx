@@ -3,11 +3,12 @@
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth.store'
-import LogoutButton from '@/components/LogoutButton'
 import {IconType} from "react-icons";
-import {FaTrophy, FaUsers, FaUser, FaUserCircle, FaPhoneSquareAlt, FaUserEdit, FaRegNewspaper} from "react-icons/fa"
-import {MdEmail, MdLiveTv} from "react-icons/md"
+import {FaRegNewspaper} from "react-icons/fa"
+import {MdLiveTv} from "react-icons/md"
 import Image from "next/image";
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher'
+import { useI18n } from '@/components/providers/I18nProvider'
 
 
 interface NavItem {
@@ -18,20 +19,21 @@ interface NavItem {
 }
 
 export default function Header() {
-    const { user, loading } = useAuthStore()
-    const [authOpen, setAuthOpen] = useState(false)
+    const { loading } = useAuthStore()
     const [mobileOpen, setMobileOpen] = useState(false)
     const [mobileSubmenus, setMobileSubmenus] = useState<string[]>([])
     const [hoveredMenu, setHoveredMenu] = useState<string | null>(null)
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const { t } = useI18n()
 
     const navLinks: NavItem[] = [
 
-        { name: 'Home', href: '/' ,icon: MdLiveTv},
-        { name: 'About', href: '/about-us' ,icon: MdLiveTv},
-        { name: 'Pricing', href: '/pricing' ,icon: MdLiveTv},
-        { name: 'Contact', href: '/contact-us' ,icon: MdLiveTv},
-        { name: 'Blogs', href: '/blogs', icon: FaRegNewspaper, },
+        { name: t('header', 'home'), href: '/' ,icon: MdLiveTv},
+        { name: t('header', 'about'), href: '/about-us' ,icon: MdLiveTv},
+        { name: t('header', 'services'), href: '/services' ,icon: MdLiveTv},
+        { name: t('header', 'pricing'), href: '/pricing' ,icon: MdLiveTv},
+        { name: t('header', 'contact'), href: '/contact-us' ,icon: MdLiveTv},
+        { name: t('header', 'blogs'), href: '/blogs', icon: FaRegNewspaper, },
     ]
 
     const handleMouseEnter = (name: string) => {
@@ -71,7 +73,7 @@ export default function Header() {
                     <button
                         className="md:hidden p-2 rounded hover:bg-gray-100 transition"
                         onClick={() => setMobileOpen((prev) => !prev)}
-                        aria-label="Toggle menu"
+                        aria-label={t('header', 'toggleMenu')}
                     >
                         <div className="w-5 h-4 flex flex-col justify-between">
                             <span className={`block w-5 h-0.5 bg-black transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
@@ -142,9 +144,10 @@ export default function Header() {
                 </nav>
 
                 {/* Auth menu */}
-                <div className="flex items-center gap-4 relative">
-                    <Link href="/" className="text-sm font-medium bg-purple-700 hover:text-primary transition-colors px-4 py-2 border border-primary rounded-lg hover:bg-primary text-white hover:text-white">
-                        Get Started
+                <div className="flex items-center gap-3 relative">
+                    <LanguageSwitcher />
+                    <Link href="/contact-us" className="text-sm font-medium bg-purple-700 hover:text-primary transition-colors px-4 py-2 border border-primary rounded-lg hover:bg-primary text-white hover:text-white">
+                        {t('header', 'getStarted')}
                     </Link>
                 </div>
             </div>
@@ -152,7 +155,10 @@ export default function Header() {
             {/* Mobile Navigation */}
             <div className={`md:hidden overflow-hidden transition-all duration-300 ${mobileOpen ? 'max-h-screen border-t' : 'max-h-0'}`}>
                 <nav className="bg-gray-50 flex flex-col">
-                    {navLinks.map((link, idx) =>
+                    <div className="border-b border-gray-200 px-4 py-3">
+                        <LanguageSwitcher className="block w-full" />
+                    </div>
+                    {navLinks.map((link) =>
                         !link.children ? (
                             <Link
                                 key={link.name}

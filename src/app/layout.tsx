@@ -4,6 +4,10 @@ import "./globals.css";
 import { Toaster } from 'sonner';
 import AuthHydrator from "@/components/AuthHydrator";
 import {GoogleAnalytics} from "@next/third-parties/google";
+import I18nProvider from "@/components/providers/I18nProvider";
+import { getI18nState } from "@/i18n/server";
+import {getCurrentUserFromSession} from "@/features/auth";
+import WhatsAppChat from "@/components/WhatsAppChat";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -57,19 +61,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
    children,
  }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { dictionary, language, languages } = await getI18nState()
+  const currentUser = await getCurrentUserFromSession()
   return (
-      <html lang="en">
+      <html lang={language}>
       <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <AuthHydrator />
-      {children}
-      <Toaster position="top-right" richColors />
+      <I18nProvider dictionary={dictionary} language={language} languages={languages}>
+          <AuthHydrator initialUser={currentUser} />
+          {children}
+          <Toaster position="top-right" richColors />
+          <WhatsAppChat />
+      </I18nProvider>
       </body>
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "G-4TRSG32LSP"} />
       </html>

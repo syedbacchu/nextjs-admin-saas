@@ -130,7 +130,7 @@ export default function DynamicGrid<T extends { id: number | string }>({
             {/* Empty State */}
             {!loading && items.length === 0 && (
                 <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                    <div className="text-4xl mb-3">🏏</div>
+                    <div className="text-4xl mb-3">🔍</div>
                     <p className="text-slate-500 font-medium">No results found matching "{search}"</p>
                 </div>
             )}

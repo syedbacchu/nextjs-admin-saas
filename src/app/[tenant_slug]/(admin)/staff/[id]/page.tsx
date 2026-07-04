@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getStaffAction } from '@/services/staff/staff.actions'
+import { getStaffAction } from '@/features/staff'
 
 interface StaffDetailsPageProps {
     params: Promise<{
@@ -49,7 +49,7 @@ export default async function StaffDetailsPage({ params }: StaffDetailsPageProps
     const staff = res.data
 
     return (
-        <div className="mx-auto max-w-4xl space-y-6">
+        <div className="mx-auto space-y-6">
             <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>

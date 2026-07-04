@@ -1,4 +1,6 @@
-import StaffForm from '@/components/staff/StaffForm'
+import { StaffForm } from "@/features/staff";
+import { getStaffsAction } from '@/features/staff';
+import { StaffLimitGuard } from '@/features/feature-check';
 
 interface CreateStaffPageProps {
     params: Promise<{
@@ -20,5 +22,13 @@ export default async function CreateStaffPage({ params }: CreateStaffPageProps) 
         )
     }
 
-    return <StaffForm tenantSlug={tenantSlug} submitLabel="Create Staff" />
+    // Get current staff count for limit checking
+    const staffResponse = await getStaffsAction(tenantSlug, 1, '')
+    const currentCount = staffResponse.success && staffResponse.data ? staffResponse.data.total_count || 0 : 0
+
+    return (
+        <StaffLimitGuard currentUsage={currentCount}>
+            <StaffForm tenantSlug={tenantSlug} submitLabel="Create Staff" />
+        </StaffLimitGuard>
+    )
 }

@@ -1,5 +1,4 @@
-import StaffForm from '@/components/staff/StaffForm'
-import { getStaffAction } from '@/services/staff/staff.actions'
+import {getStaffAction, StaffForm} from '@/features/staff'
 
 interface EditStaffPageProps {
     params: Promise<{

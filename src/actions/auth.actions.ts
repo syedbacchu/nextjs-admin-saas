@@ -1,1 +1,1 @@
-export { meAction } from '@/services/auth/auth.actions'
+export { meAction } from "@/features/auth/actions/auth.actions"

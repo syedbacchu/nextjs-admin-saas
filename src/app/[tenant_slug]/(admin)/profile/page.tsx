@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { getProfileAction } from '@/services/profile/profile.actions'
+import { Metadata } from 'next'
+import { constructMetadata } from '@/lib/seo'
+import { getProfileAction } from '@/features/profile'
 
 interface ProfilePageProps {
     params: Promise<{
@@ -8,6 +10,15 @@ interface ProfilePageProps {
     }> | {
         tenant_slug: string
     }
+}
+
+export async function generateMetadata({ params }: ProfilePageProps): Promise<Metadata> {
+    const { tenant_slug } = await params
+    return constructMetadata({
+        title: `Profile - ${tenant_slug}`,
+        description: 'View your profile information and account details',
+        noIndex: true,
+    })
 }
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
@@ -36,7 +47,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     const { user, tenant } = res.data
 
     return (
-        <div className="mx-auto max-w-4xl space-y-6">
+        <div className="mx-auto space-y-6">
             <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div className="flex items-center gap-4">

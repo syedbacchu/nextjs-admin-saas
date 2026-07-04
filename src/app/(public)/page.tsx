@@ -1,22 +1,20 @@
 import { Metadata } from "next"
 import { constructMetadata } from "@/lib/seo"
+import { getRequestDictionary } from "@/i18n/server"
+import HomePage from "@/features/home/components/HomePage";
 
 export async function generateMetadata(): Promise<Metadata> {
     return constructMetadata({
-        title: `Home`,
-        description: `Keep track of your games with ease, anytime, anywhere.`,
+        title: 'Home - Trusted Business Solutions for Modern Growth',
+        description: 'Demo Company is a leading provider of innovative business solutions designed to help individuals and organizations achieve sustainable growth. We specialize in delivering high-quality services with a strong focus on reliability, customer satisfaction, and long-term value.',
         image: "/og/default.png",
     })
 }
 
 export default async function Page() {
-    // Fetch data: Page 1, empty search
-
-    // Safely extract the array, defaulting to empty if null
+    const dictionary = await getRequestDictionary()
 
     return (
-        <section className="w-full bg-gray-50 min-h-screen">
-            <h2>Public landing page</h2>
-        </section>
+        <HomePage />
     )
 }

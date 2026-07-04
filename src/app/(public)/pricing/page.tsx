@@ -1,22 +1,20 @@
 import { Metadata } from 'next'
 import { constructMetadata } from '@/lib/seo'
-import BlogPublicList from '@/components/blog/BlogPublicList'
+import { getRequestDictionary } from '@/i18n/server'
+import PricingPage from "@/features/pricing/components/PricingPage";
 
 export async function generateMetadata(): Promise<Metadata> {
     return constructMetadata({
-        title: 'Pricing Plan',
-        description: 'Latest cricket stories, match insights, and updates on SetMyScore.',
-        image: '/og/default.png',
+        title: 'Pricing Plan - Trusted Business Solutions for Modern Growth',
+        description: 'Demo Company is a leading provider of innovative business solutions designed to help individuals and organizations achieve sustainable growth. We specialize in delivering high-quality services with a strong focus on reliability, customer satisfaction, and long-term value.',
+        image: "/og/default.png",
     })
 }
 
 export default async function page() {
+    const dictionary = await getRequestDictionary()
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
-            <div className="mx-auto px-4 py-8 -mt-6 relative z-10">
-                Pricing panel here
-            </div>
-        </div>
+        <PricingPage/>
     )
 }
-

@@ -5,5 +5,7 @@ export type RequestConfig<T = any> = {
     data?: any
     headers?: Record<string, string>
     server?: boolean
+    includeServerSecret?: boolean
+    includeAuthToken?: boolean
     responseType?: T
 }

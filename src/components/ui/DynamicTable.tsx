@@ -3,6 +3,8 @@
 import { ColumnDef } from '@/types/api'
 import { useInfiniteList } from '@/hooks/useInfiniteList'
 import { ReactNode } from "react";
+import { useI18n } from '@/components/providers/I18nProvider'
+import { translateUiText } from '@/i18n/ui'
 
 // 1. Reusing the same Configuration Logic
 type StatVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'purple';
@@ -12,16 +14,31 @@ export interface StatConfig {
     label: string;
     variant?: StatVariant;
     icon?: ReactNode;
+    formatValue?: (value: unknown) => ReactNode;
 }
 
 interface Props<T> {
-    fetchData: (page: number, search: string) => Promise<any>
+    fetchData: (page: number, search: string, filters: Record<string, string>) => Promise<{
+        success: boolean
+        data: {
+            total_page: number
+            data: T[]
+            stats?: Record<string, unknown> | null
+            summary?: unknown
+        }
+    }>
     columns: ColumnDef<T>[]
     title?: string
-    // 2. New Props for Stats
     showStats?: boolean
     statsConfig?: StatConfig[]
     statsGridClassName?: string
+    initialFilters?: Record<string, string>
+    filtersGridClassName?: string
+    renderFilters?: (args: {
+        filters: Record<string, string>
+        onFilterChange: (key: string, value: string) => void
+        resetFilters: () => void
+    }) => ReactNode
 }
 
 // 3. Shared Styling Map
@@ -40,18 +57,24 @@ export default function DynamicTable<T extends { id: number | string }>({
     title,
     showStats = false,
     statsConfig = [],
-    statsGridClassName
+    statsGridClassName,
+    initialFilters = {},
+    filtersGridClassName,
+    renderFilters,
 }: Props<T>) {
+    const { language } = useI18n()
 
-    // 4. Get 'stats' from the hook
     const {
         items,
         loading,
         lastElementRef,
         handleSearch,
+        handleFilterChange,
+        resetFilters,
         search,
-        stats
-    } = useInfiniteList<T>({ fetchData })
+        stats,
+        filters,
+    } = useInfiniteList<T>({ fetchData, initialFilters })
 
     // Auto-calculate grid layout for stats
     const defaultStatsGrid = statsConfig.length === 4
@@ -65,7 +88,7 @@ export default function DynamicTable<T extends { id: number | string }>({
                 <div className={`grid gap-3 mb-4 ${statsGridClassName || defaultStatsGrid}`}>
                     {statsConfig.map((conf) => {
                         const style = VARIANT_STYLES[conf.variant || 'default'];
-                        const value = (stats as Record<string, any>)[conf.key] ?? 0;
+                        const value = (stats as Record<string, unknown>)[conf.key] ?? 0;
 
                         return (
                             <div
@@ -73,12 +96,12 @@ export default function DynamicTable<T extends { id: number | string }>({
                                 className={`${style.bg} ${style.border} p-3 rounded-xl border shadow-sm flex flex-col items-center justify-center text-center`}
                             >
                                 <span className={`text-[10px] md:text-xs font-bold uppercase tracking-wider ${style.label}`}>
-                                    {conf.label}
+                                {translateUiText(conf.label, language)}
                                 </span>
                                 <div className="flex items-center gap-2 mt-0.5">
                                     {conf.icon && <span className="text-lg opacity-80">{conf.icon}</span>}
                                     <span className={`text-xl md:text-2xl font-black ${style.text}`}>
-                                        {value}
+                                        {conf.formatValue ? conf.formatValue(value) : String(value)}
                                     </span>
                                 </div>
                             </div>
@@ -88,12 +111,11 @@ export default function DynamicTable<T extends { id: number | string }>({
             )}
             {/* Header & Search */}
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                <h2 className="text-lg font-bold text-gray-800">{title || 'List'}</h2>
+                <h2 className="text-lg font-bold text-gray-800">{translateUiText(title || 'List', language)}</h2>
                 <div className="w-full md:w-64">
-                    {/* Simple search input */}
                     <input
                         type="text"
-                        placeholder="Search..."
+                        placeholder={translateUiText('Search...', language)}
                         value={search}
                         onChange={(e) => handleSearch(e.target.value)}
                         className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -101,32 +123,41 @@ export default function DynamicTable<T extends { id: number | string }>({
                 </div>
             </div>
 
-            {/* Table Container */}
+            {renderFilters ? (
+                <div className="w-full">
+                    {renderFilters({
+                        filters,
+                        onFilterChange: handleFilterChange,
+                        resetFilters,
+                    })}
+                </div>
+            ) : null}
+
             <div className="overflow-x-auto relative h-[600px] overflow-y-auto border rounded">
                 <table className="w-full text-left text-sm text-gray-600">
-                    <thead className="bg-gray-50 text-xs uppercase sticky top-0 z-10">
+                    <thead className="bg-black text-white text-xs uppercase sticky top-0 z-10">
                     <tr>
                         {columns.map((col, index) => (
-                            <th key={index} className={`px-4 py-3 font-medium ${col.className || ''}`}>
-                                {col.header}
+                            <th key={index} className={`px-4 py-3 font-medium text-white ${col.className || ''}`}>
+                                {typeof col.header === 'string' ? translateUiText(col.header, language) : col.header}
                             </th>
                         ))}
                     </tr>
                     </thead>
                     <tbody className="divide-y">
                     {items.length > 0 ? (
-                        items.map((item, index) => { // 👈 'index' comes from here
+                        items.map((item, index) => {
                             const isLast = items.length === index + 1
                             return (
                                 <tr
                                     key={item.id}
-                                    ref={isLast ? (lastElementRef as any) : null}
+                                    ref={isLast ? lastElementRef : null}
                                     className="hover:bg-gray-50 transition-colors"
                                 >
                                     {columns.map((col, i) => (
                                         <td key={i} className="px-4 py-3">
                                             {col.cell
-                                                ? col.cell(item, index) // 👈 ✅ PASS THE INDEX HERE
+                                                ? col.cell(item, index)
                                                 : (col.accessorKey ? item[col.accessorKey] as React.ReactNode : '-')}
                                         </td>
                                     ))}
@@ -137,18 +168,16 @@ export default function DynamicTable<T extends { id: number | string }>({
                         !loading && (
                             <tr>
                                 <td colSpan={columns.length} className="text-center py-8 text-gray-400">
-                                    No data found
+                                    {translateUiText('No data found', language)}
                                 </td>
                             </tr>
                         )
                     )}
                     </tbody>
                 </table>
-
-                {/* Loading Skeleton / Spinner */}
                 {loading && (
                     <div className="py-4 text-center text-sm text-blue-500">
-                        Loading more data...
+                        {translateUiText('Loading more data...', language)}
                     </div>
                 )}
             </div>

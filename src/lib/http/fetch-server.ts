@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers'
 import {API_HEADERS} from "@/constants/api";
+import { LANGUAGE_COOKIE_NAME, normalizeSupportedLanguage } from '@/i18n/config'
 
 // Re-declare interface locally or import from a shared types file
 interface FetchArgs {
@@ -10,6 +11,8 @@ interface FetchArgs {
     params?: Record<string, any>
     data?: any
     headers?: HeadersInit
+    includeServerSecret?: boolean
+    includeAuthToken?: boolean
 }
 
 export async function apiFetchServer({
@@ -18,6 +21,8 @@ export async function apiFetchServer({
      params,
      data,
      headers: customHeaders = {},
+     includeServerSecret = true,
+     includeAuthToken = true,
  }: FetchArgs): Promise<Response> {
 
     // 1. Base URL (Server side always has access to env)
@@ -36,15 +41,16 @@ export async function apiFetchServer({
     const fullUrl = `${baseUrl}${url}${query}`
 
     // 2. Prepare Headers
+    const cookieStore = await cookies()
+    const language = normalizeSupportedLanguage(cookieStore.get(LANGUAGE_COOKIE_NAME)?.value)
     const headers: Record<string, string> = {
-        ...API_HEADERS(true), // Pass true for server
+        ...API_HEADERS(includeServerSecret, language),
         ...customHeaders as Record<string, string>,
     }
 
     // 3. Inject Token SECURELY
-    const cookieStore = await cookies()
     const token = cookieStore.get('access_token')?.value
-    if (token) {
+    if (includeAuthToken && token) {
         headers['Authorization'] = `Bearer ${token}`
     }
 

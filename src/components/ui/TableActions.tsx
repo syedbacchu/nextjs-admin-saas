@@ -1,16 +1,26 @@
+'use client'
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaEye, FaEdit } from "react-icons/fa";
-import { MdDeleteForever, MdWarning } from "react-icons/md";
+import { FaEye, FaEdit, FaPrint } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
+import { useI18n } from '@/components/providers/I18nProvider'
+import { translateUiText } from '@/i18n/ui'
+import DeleteConfirmationModal from '@/components/ui/DeleteConfirmationModal'
 
 interface TableActionsProps {
     id: string | number;
     onDelete?: (id: string | number) => void;
     hasView?: boolean;
+    hasPrint?: boolean;
     hasEdit?: boolean;
     hasDelete?: boolean;
     viewLink?: string;
+    printLink?: string;
     editLink?: string;
+    itemName?: string;
+    deleteTitle?: string;
+    deleteMessage?: string;
     children?: React.ReactNode;
 }
 
@@ -18,14 +28,20 @@ export default function TableActions({
      id,
      onDelete,
      hasView = false,
+     hasPrint = false,
      hasEdit = false,
      hasDelete = false,
      viewLink,
+     printLink,
      editLink,
+     itemName,
+     deleteTitle,
+     deleteMessage,
      children,
  }: TableActionsProps) {
     const router = useRouter();
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const { language } = useI18n()
 
     const confirmDelete = () => {
         if (onDelete) {
@@ -54,9 +70,25 @@ export default function TableActions({
                                 ? "text-blue-600 hover:text-blue-800 cursor-pointer"
                                 : "text-gray-400 cursor-not-allowed"
                         }`}
-                        title="View Details"
+                        title={translateUiText('View Details', language)}
                     >
                         <FaEye />
+                    </button>
+                )}
+
+                {/* Print Button */}
+                {hasPrint && (
+                    <button
+                        onClick={() => printLink && window.open(printLink, '_blank')}
+                        disabled={!printLink}
+                        className={`flex items-center gap-1 font-medium transition-colors ${
+                            printLink
+                                ? "text-slate-700 hover:text-slate-950 cursor-pointer"
+                                : "text-gray-400 cursor-not-allowed"
+                        }`}
+                        title={translateUiText('Print Chalan', language)}
+                    >
+                        <FaPrint />
                     </button>
                 )}
 
@@ -71,7 +103,7 @@ export default function TableActions({
                                 ? "text-emerald-600 hover:text-emerald-800 cursor-pointer"
                                 : "text-gray-400 cursor-not-allowed"
                         }`}
-                        title="Edit"
+                        title={translateUiText('Edit', language)}
                     >
                         <FaEdit />
                     </button>
@@ -82,42 +114,23 @@ export default function TableActions({
                     <button
                         onClick={() => setIsDeleteOpen(true)}
                         className="flex items-center gap-1 text-red-500 hover:text-red-700 font-medium transition-colors"
-                        title="Delete"
+                        title={translateUiText('Delete', language)}
                     >
                         <MdDeleteForever />
                     </button>
                 )}
             </div>
 
-            {/* --- Delete Modal --- */}
-            {hasDelete && isDeleteOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fadeIn">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden">
-                        <div className="bg-red-50 p-4 flex flex-col items-center border-b border-red-100">
-                            <div className="bg-red-100 p-3 rounded-full mb-2">
-                                <MdWarning className="text-3xl text-red-600" />
-                            </div>
-                            <h3 className="text-lg font-bold text-gray-900">Delete Item?</h3>
-                            <p className="text-sm text-gray-500 text-center mt-1">
-                                Are you sure? This action cannot be undone.
-                            </p>
-                        </div>
-                        <div className="flex gap-3 p-4 bg-gray-50 justify-center">
-                            <button
-                                onClick={() => setIsDeleteOpen(false)}
-                                className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={confirmDelete}
-                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium shadow-md transition"
-                            >
-                                Yes, Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            {/* --- Delete Confirmation Modal --- */}
+            {hasDelete && (
+                <DeleteConfirmationModal
+                    isOpen={isDeleteOpen}
+                    onClose={() => setIsDeleteOpen(false)}
+                    onConfirm={confirmDelete}
+                    title={deleteTitle}
+                    message={deleteMessage}
+                    itemName={itemName}
+                />
             )}
         </>
     );

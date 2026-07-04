@@ -2,17 +2,33 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 
-interface UseInfiniteListProps<T> {
-    fetchData: (page: number, search: string) => Promise<any> // Your service call
+interface InfiniteListResponse<T> {
+    success: boolean
+    data: {
+        total_page: number
+        data: T[]
+        stats?: Record<string, unknown> | null
+        summary?: unknown
+    }
 }
 
-export function useInfiniteList<T>({ fetchData }: UseInfiniteListProps<T>) {
+interface UseInfiniteListProps<T> {
+    fetchData: (page: number, search: string, filters: Record<string, string>) => Promise<InfiniteListResponse<T>>
+    initialFilters?: Record<string, string>
+}
+
+export function useInfiniteList<T>({ fetchData, initialFilters = {} }: UseInfiniteListProps<T>) {
     const [items, setItems] = useState<T[]>([])
     const [loading, setLoading] = useState(false)
     const [page, setPage] = useState(1)
     const [hasMore, setHasMore] = useState(true)
     const [search, setSearch] = useState('')
-    const [stats, setStats] = useState<{ total: number, active_count: number, paid_count: number } | null>(null)
+    const [stats, setStats] = useState<Record<string, unknown> | null>(null)
+    const [filters, setFilters] = useState<Record<string, string>>(initialFilters)
+
+    // Use a ref to store fetchData to avoid dependency issues
+    const fetchDataRef = useRef(fetchData)
+    fetchDataRef.current = fetchData
 
     // To prevent race conditions
     const isFetching = useRef(false)
@@ -25,6 +41,20 @@ export function useInfiniteList<T>({ fetchData }: UseInfiniteListProps<T>) {
         setHasMore(true)
     }
 
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => ({ ...prev, [key]: value }))
+        setPage(1)
+        setItems([])
+        setHasMore(true)
+    }
+
+    const resetFilters = () => {
+        setFilters(initialFilters)
+        setPage(1)
+        setItems([])
+        setHasMore(true)
+    }
+
     // 2. Main Fetch Function
     const loadItems = useCallback(async () => {
         if (isFetching.current || (!hasMore && page !== 1)) return
@@ -33,7 +63,7 @@ export function useInfiniteList<T>({ fetchData }: UseInfiniteListProps<T>) {
         isFetching.current = true
 
         try {
-            const res = await fetchData(page, search)
+            const res = await fetchDataRef.current(page, search, filters)
 
             if (res.success) {
                 const newData = res.data.data
@@ -41,9 +71,7 @@ export function useInfiniteList<T>({ fetchData }: UseInfiniteListProps<T>) {
 
                 setItems((prev) => (page === 1 ? newData : [...prev, ...newData]))
                 setHasMore(page < totalPages)
-                if (res.data?.stats) {
-                    setStats(res.data.stats)
-                }
+                setStats((res.data?.stats || res.data?.summary || null) as Record<string, unknown> | null)
             }
         } catch (error) {
             console.error('Failed to load list', error)
@@ -51,7 +79,7 @@ export function useInfiniteList<T>({ fetchData }: UseInfiniteListProps<T>) {
             setLoading(false)
             isFetching.current = false
         }
-    }, [page, search, fetchData]) // Remove hasMore from deps to avoid stale closures if logic changes
+    }, [page, search, filters, hasMore])
 
     // 3. Trigger Fetch on dependency change
     useEffect(() => {
@@ -60,14 +88,18 @@ export function useInfiniteList<T>({ fetchData }: UseInfiniteListProps<T>) {
 
     // 4. Infinite Scroll Observer Ref
     const observer = useRef<IntersectionObserver | null>(null)
-    const lastElementRef = useCallback((node: HTMLDivElement) => {
+    const lastElementRef = useCallback((node: HTMLTableRowElement | null) => {
         if (loading) return
+        if (isFetching.current) return // Prevent multiple simultaneous calls
         if (observer.current) observer.current.disconnect()
 
         observer.current = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && hasMore) {
+            if (entries[0].isIntersecting && hasMore && !isFetching.current) {
                 setPage((prev) => prev + 1)
             }
+        }, {
+            rootMargin: '100px', // Only trigger when 100px from bottom
+            threshold: 0.1 // Require at least 10% visibility
         })
         if (node) observer.current.observe(node)
     }, [loading, hasMore])
@@ -78,7 +110,10 @@ export function useInfiniteList<T>({ fetchData }: UseInfiniteListProps<T>) {
         hasMore,
         lastElementRef,
         handleSearch,
+        handleFilterChange,
+        resetFilters,
         search,
-        stats
+        stats,
+        filters,
     }
 }

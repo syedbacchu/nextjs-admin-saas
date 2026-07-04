@@ -6,9 +6,9 @@ import { toast } from 'sonner'
 import DynamicTable from '@/components/ui/DynamicTable'
 import TableActions from '@/components/ui/TableActions'
 import { ColumnDef } from '@/types/api'
-import { getStaffsAction } from '@/services/staff/staff.actions'
-import { deleteStaffClient } from '@/services/staff/staff.client'
-import { Staff, StaffListResponse } from '@/services/staff/staff.types'
+import { getStaffsAction, deleteStaffClient, Staff, StaffListResponse } from '@/features/staff'
+import StaffFeatureAccess from '@/features/staff/components/StaffFeatureAccess'
+import { StaffLimitGuard, useStaffTier } from '@/features/feature-check'
 
 const EMPTY_STAFF_LIST: StaffListResponse = {
     success: false,
@@ -29,6 +29,10 @@ export default function StaffPage() {
     const params = useParams<{ tenant_slug?: string }>()
     const tenantSlug = String(params?.tenant_slug || '').trim()
     const [refreshKey, setRefreshKey] = useState(0)
+    const [featureModalOpen, setFeatureModalOpen] = useState(false)
+    const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null)
+    const [currentStaffCount, setCurrentStaffCount] = useState(0)
+    const { limit: staffLimit } = useStaffTier()
 
     const columns: ColumnDef<Staff>[] = [
         {
@@ -68,22 +72,37 @@ export default function StaffPage() {
             header: 'Actions',
             className: 'text-right',
             cell: (item) => (
-                <TableActions
-                    id={item.id}
-                    hasView
-                    hasEdit
-                    hasDelete
-                    viewLink={`/${tenantSlug}/staff/${item.id}`}
-                    editLink={`/${tenantSlug}/staff/${item.id}/edit`}
-                    onDelete={handleDelete}
-                />
+                <div className="flex items-center justify-end gap-2">
+                    <button
+                        onClick={() => handleManageAccess(item)}
+                        className="rounded-md border border-slate-300 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                    >
+                        Manage Access
+                    </button>
+                    <TableActions
+                        id={item.id}
+                        hasView
+                        hasEdit
+                        hasDelete
+                        viewLink={`/${tenantSlug}/staff/${item.id}`}
+                        editLink={`/${tenantSlug}/staff/${item.id}/edit`}
+                        onDelete={handleDelete}
+                        itemName={item.name}
+                        deleteTitle="Delete Staff?"
+                        deleteMessage="Are you sure you want to delete this staff member? This action cannot be undone."
+                    />
+                </div>
             ),
         },
     ]
 
     async function fetchStaff(page: number, search: string) {
         if (!tenantSlug) return EMPTY_STAFF_LIST
-        return getStaffsAction(tenantSlug, page, search)
+        const result = await getStaffsAction(tenantSlug, page, search)
+        if (result.success && result.data) {
+            setCurrentStaffCount(result.data.total_count || 0)
+        }
+        return result
     }
 
     async function handleDelete(id: number | string) {
@@ -102,16 +121,38 @@ export default function StaffPage() {
         }
     }
 
+    function handleManageAccess(staff: Staff) {
+        setSelectedStaff(staff)
+        setFeatureModalOpen(true)
+    }
+
+    function handleCloseFeatureModal() {
+        setFeatureModalOpen(false)
+        setSelectedStaff(null)
+    }
+
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-slate-900">Staff Management</h1>
-                <button
-                    onClick={() => router.push(`/${tenantSlug}/staff/create`)}
-                    className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
-                >
-                    + Add Staff
-                </button>
+                <div className="flex items-center gap-4">
+                    {staffLimit && (
+                        <div className="text-sm text-slate-600">
+                            <span className="font-medium">{currentStaffCount}</span>
+                            <span className="mx-1">/</span>
+                            <span className="font-medium">{staffLimit}</span>
+                            <span className="ml-1 text-slate-500">staff used</span>
+                        </div>
+                    )}
+                    <StaffLimitGuard currentUsage={currentStaffCount}>
+                        <button
+                            onClick={() => router.push(`/${tenantSlug}/staff/create`)}
+                            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+                        >
+                            + Add Staff
+                        </button>
+                    </StaffLimitGuard>
+                </div>
             </div>
 
             <DynamicTable
@@ -120,6 +161,19 @@ export default function StaffPage() {
                 fetchData={fetchStaff}
                 columns={columns}
             />
+
+            {featureModalOpen && selectedStaff && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+                    <div className="w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl">
+                        <StaffFeatureAccess
+                            tenantSlug={tenantSlug}
+                            staffId={selectedStaff.id}
+                            staffName={selectedStaff.name}
+                            onClose={handleCloseFeatureModal}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

@@ -3,6 +3,8 @@
 import { useId } from 'react'
 import { useFieldValidation } from '@/hooks/useFieldValidation'
 import { ValidatorFn } from '@/lib/validators'
+import { useI18n } from '@/components/providers/I18nProvider'
+import { translateUiText } from '@/i18n/ui'
 
 interface Props {
     label: string
@@ -32,11 +34,12 @@ export default function SelectInput({
     const { error, validate } = useFieldValidation(value, validators)
     const reactId = useId()
     const fieldId = id || `${name || 'select'}-${reactId}`
+    const { language } = useI18n()
 
     return (
         <div className="flex w-full flex-col gap-1">
             <label htmlFor={fieldId} className="text-sm font-medium text-gray-700">
-                {label} {required && <span className="text-red-500">*</span>}
+                {translateUiText(label, language)} {required && <span className="text-red-500">*</span>}
             </label>
             <select
                 id={fieldId}
@@ -48,10 +51,10 @@ export default function SelectInput({
                     error ? 'border-red-500 ring-red-100' : 'border-gray-300 focus:border-blue-500'
                 }`}
             >
-                {includeEmptyOption && <option value="">{emptyOptionLabel}</option>}
+                {includeEmptyOption && <option value="">{translateUiText(emptyOptionLabel, language)}</option>}
                 {options.map((o) => (
                     <option key={o.value} value={o.value}>
-                        {o.label}
+                        {translateUiText(o.label, language)}
                     </option>
                 ))}
             </select>

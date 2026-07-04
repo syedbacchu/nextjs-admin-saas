@@ -1,4 +1,4 @@
-import { API_HEADERS } from '@/constants/api'
+import { API_HEADERS, resolveClientLanguage } from '@/constants/api'
 
 export interface FetchArgs {
     method: string
@@ -32,7 +32,7 @@ export async function apiFetchClient({
     const fullUrl = `${baseUrl}${url}${query}`
 
     const headers: Record<string, string> = {
-        ...API_HEADERS(false),
+        ...API_HEADERS(false, typeof document === 'undefined' ? undefined : resolveClientLanguage(document.cookie)),
         ...(customHeaders as Record<string, string>),
     }
 

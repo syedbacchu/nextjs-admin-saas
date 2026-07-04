@@ -10,7 +10,7 @@ interface MetadataProps {
 
 export function constructMetadata({
       title,
-      description = "Keep track of your games with ease, anytime, anywhere.",
+      description = "Take full control of your transport business — fully digital, fully profitable.",
       image = "/og/default.png",
       icons = "/favicon.ico",
       noIndex = false
@@ -35,10 +35,10 @@ export function constructMetadata({
             title,
             description,
             images: [image],
-            creator: "@setmyscore" // Optional: Add your handle if you have one
+            creator: "@democompany" // Optional: Add your handle if you have one
         },
         icons,
-        metadataBase: new URL('https://setmyscore.com'),
+        metadataBase: new URL('https://democompany.com'),
         ...(noIndex && {
             robots: {
                 index: false,

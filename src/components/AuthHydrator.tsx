@@ -2,23 +2,33 @@
 
 import { useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth.store'
-import { meAction } from '@/services/auth/auth.actions'
+import { meAction, AuthUser } from '@/features/auth'
 
-export default function AuthHydrator() {
+interface AuthHydratorProps {
+    initialUser?: AuthUser | null
+}
+
+export default function AuthHydrator({ initialUser = null }: AuthHydratorProps) {
     const setUser = useAuthStore((s) => s.setUser)
 
     useEffect(() => {
+        setUser(initialUser)
+    }, [initialUser, setUser])
+
+    useEffect(() => {
+        if (initialUser) return
+
         async function hydrate() {
             try {
                 const user = await meAction()
-                setUser(user) // ✅ sets loading = false
+                setUser(user)
             } catch {
-                setUser(null) // ✅ still stops loading
+                setUser(null)
             }
         }
 
         hydrate()
-    }, [setUser])
+    }, [initialUser, setUser])
 
     return null
 }

@@ -18,6 +18,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## Language Configuration
+
+Configure supported languages from `.env`:
+
+```env
+APP_LANGUAGES=en:English,bn:Bangla
+APP_DEFAULT_LANGUAGE=en
+```
+
+`APP_LANGUAGES` uses `code:label` pairs separated by commas. The header dropdown reads this list, stores the selected language in a cookie, and the app falls back to `APP_DEFAULT_LANGUAGE` when the cookie is missing or invalid.
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
@@ -34,3 +45,29 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# Features
+- Landing page (incomplete)
+- Authentication
+- Dashboard (incomplete)
+- Profile management
+- Subscription
+- Vehicles
+- Rent vehicles
+- Employees
+- Staff
+- Customers
+- Vendors
+- Helpers
+- Offices
+- Office Expenses
+- Salary Expenses
+- File System
+- Route Pricing
+- Drivers
+- Fuel Purchase
+- Maintenance Purchase
+- Official Product Purchase
+- fund transfer
+- payment receives
+- vendor payments

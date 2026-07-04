@@ -10,6 +10,8 @@ export async function request<T>({
      params,
      data,
      headers,
+     includeServerSecret,
+     includeAuthToken,
  }: RequestConfig): Promise<ApiResponse<T>> {
     const res = await apiFetchServer({
         method,
@@ -17,6 +19,8 @@ export async function request<T>({
         params,
         data,
         headers,
+        includeServerSecret,
+        includeAuthToken,
     })
 
     const json = await res.json().catch(() => null)

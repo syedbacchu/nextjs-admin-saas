@@ -1,6 +1,8 @@
 'use client'
 
 import { useId, useState } from 'react'
+import { useI18n } from '@/components/providers/I18nProvider'
+import { translateUiText } from '@/i18n/ui'
 
 interface Props {
     label: string
@@ -9,6 +11,7 @@ interface Props {
     onChange: (value: string) => void
     error?: string
     textarea?: boolean
+    readOnly?: boolean
 
     // ✅ New Props
     placeholder?: string
@@ -16,7 +19,7 @@ interface Props {
 
     // Validation props
     required?: boolean
-    type?: 'text' | 'number' | 'tel' | 'email' | 'password'
+    type?: 'text' | 'number' | 'tel' | 'email' | 'password' | 'month' | 'date' | 'time'
     maxLength?: number
     minLength?: number
     pattern?: RegExp
@@ -34,6 +37,7 @@ export default function TextInput({
                                       onChange,
                                       error,
                                       textarea,
+                                      readOnly,
                                       placeholder, // Destructured
                                       helpText,    // Destructured
                                       required,
@@ -50,6 +54,7 @@ export default function TextInput({
     const [localError, setLocalError] = useState<string | null>(null)
     const reactId = useId()
     const fieldId = id || `${name}-${reactId}`
+    const { language, t } = useI18n()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         let val = e.target.value
@@ -67,17 +72,17 @@ export default function TextInput({
         const valToCheck = value || ''
 
         if (required && !valToCheck) {
-            setLocalError('This field is required')
+            setLocalError(t('validation', 'required'))
             return
         }
 
         if (minLength && valToCheck.length < minLength) {
-            setLocalError(`Minimum ${minLength} characters required`)
+            setLocalError(t('validation', 'minCharacters', { count: minLength }))
             return
         }
 
         if (pattern && !pattern.test(valToCheck)) {
-            setLocalError('Invalid format')
+            setLocalError(t('validation', 'invalidFormat'))
             return
         }
 
@@ -96,11 +101,14 @@ export default function TextInput({
 
     // Determine if we have an active error (prop or local)
     const activeError = error || localError
+    const translatedLabel = translateUiText(label, language)
+    const translatedPlaceholder = placeholder ? translateUiText(placeholder, language) : undefined
+    const translatedHelpText = helpText ? translateUiText(helpText, language) : undefined
 
     return (
         <div className="flex flex-col gap-1 w-full">
             <label htmlFor={fieldId} className="text-sm font-medium text-gray-700">
-                {label} {required && <span className="text-red-500">*</span>}
+                {translatedLabel} {required && <span className="text-red-500">*</span>}
             </label>
 
             {textarea ? (
@@ -110,9 +118,11 @@ export default function TextInput({
                     value={value || ''}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder={placeholder}
+                    readOnly={readOnly}
+                    placeholder={translatedPlaceholder}
                     className={`border rounded px-3 py-2 focus:outline-none focus:ring transition-all
                         w-full
+                        ${readOnly ? 'bg-slate-50 cursor-not-allowed' : ''}
                         ${activeError ? 'border-red-500 ring-red-100' : 'border-gray-300 focus:border-blue-500'}
                     `}
                     rows={rows}
@@ -125,9 +135,11 @@ export default function TextInput({
                     value={value || ''}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder={placeholder}
+                    readOnly={readOnly}
+                    placeholder={translatedPlaceholder}
                     className={`border rounded px-3 py-2 focus:outline-none focus:ring transition-all
                         w-full
+                        ${readOnly ? 'bg-slate-50 cursor-not-allowed' : ''}
                         ${activeError ? 'border-red-500 ring-red-100' : 'border-gray-300 focus:border-blue-500'}
                     `}
                 />
@@ -136,8 +148,8 @@ export default function TextInput({
             {/* Logic: Show Error if exists, otherwise show Help Text */}
             {activeError ? (
                 <span className="text-red-500 text-xs animate-pulse">{activeError}</span>
-            ) : helpText ? (
-                <span className="text-gray-500 text-xs">{helpText}</span>
+            ) : translatedHelpText ? (
+                <span className="text-gray-500 text-xs">{translatedHelpText}</span>
             ) : null}
         </div>
     )

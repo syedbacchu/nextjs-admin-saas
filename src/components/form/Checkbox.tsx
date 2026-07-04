@@ -2,6 +2,8 @@
 
 import { useFieldValidation } from '@/hooks/useFieldValidation'
 import { ValidatorFn } from '@/lib/validators'
+import { useI18n } from '@/components/providers/I18nProvider'
+import { translateUiText } from '@/i18n/ui'
 
 interface Props {
     label: string
@@ -15,8 +17,9 @@ export default function Checkbox({
                                      checked,
                                      onChange,
                                      validators = [],
-                                 }: Props) {
+ }: Props) {
     const { error, validate } = useFieldValidation(checked, validators)
+    const { language } = useI18n()
 
     return (
         <div>
@@ -27,7 +30,7 @@ export default function Checkbox({
                     onChange={(e) => onChange(e.target.checked)}
                     onBlur={validate}
                 />
-                {label}
+                {translateUiText(label, language)}
             </label>
             {error && <span className="text-red-500 text-xs">{error}</span>}
         </div>

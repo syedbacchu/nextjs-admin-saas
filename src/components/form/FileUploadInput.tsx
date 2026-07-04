@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect, ChangeEvent, useRef } from 'react'
+import { useI18n } from '@/components/providers/I18nProvider'
+import { translateUiText } from '@/i18n/ui'
 
 interface FileUploadProps {
     label: string
@@ -21,6 +23,7 @@ export default function FileUploadInput({
                                         }: FileUploadProps) {
     const [preview, setPreview] = useState<string | null>(null)
     const [localError, setLocalError] = useState<string | null>(null)
+    const { language } = useI18n()
 
     // 1. Create a ref to control the input element directly
     const inputRef = useRef<HTMLInputElement>(null)
@@ -49,13 +52,13 @@ export default function FileUploadInput({
         if (file) {
             const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg']
             if (!validTypes.includes(file.type)) {
-                setLocalError('Only JPG, PNG, and GIF formats are allowed.')
+                setLocalError(translateUiText('Only JPG, PNG, and GIF formats are allowed.', language))
                 return
             }
 
             const maxSizeInBytes = 1024 * 1024 // 1MB
             if (file.size > maxSizeInBytes) {
-                setLocalError('File size must be less than 1MB.')
+                setLocalError(translateUiText('File size must be less than 1MB.', language))
                 return
             }
         }
@@ -72,7 +75,7 @@ export default function FileUploadInput({
 
     return (
         <div className="flex flex-col gap-2 w-full">
-            <label className="text-sm font-medium text-gray-700">{label}</label>
+            <label className="text-sm font-medium text-gray-700">{translateUiText(label, language)}</label>
 
             {/* 3. Added onClick to the main container */}
             <div
@@ -93,19 +96,19 @@ export default function FileUploadInput({
                     <div className="relative w-full h-48">
                         <img
                             src={preview}
-                            alt="Preview"
+                            alt={translateUiText('Preview', language)}
                             className="w-full h-full object-contain rounded"
                         />
                         {/* Added group-hover to ensure this shows up when hovering the parent div */}
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white text-sm font-medium rounded">
-                            Click to Change
+                            {translateUiText('Click to Change', language)}
                         </div>
                     </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center py-6 text-gray-500">
                         <svg className="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        <span className="text-xs">Click to upload image</span>
-                        <span className="text-[10px] text-gray-400 mt-1">(Max 1MB)</span>
+                        <span className="text-xs">{translateUiText('Click to upload image', language)}</span>
+                        <span className="text-[10px] text-gray-400 mt-1">{translateUiText('(Max 1MB)', language)}</span>
                     </div>
                 )}
             </div>
